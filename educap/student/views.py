@@ -1,5 +1,56 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from .models import Student
+
 
 # Create your views here.
 def homes(request):
-    return render(request,'student/homes.html')
+    try:
+        if request.session['userid'] != "":
+            student = Student.objects.get(id=request.session['userid'])
+
+            params = {"student": student}
+            return render(request, "student/homes.html", params)
+        else:
+            return redirect('../')
+    except:
+        return redirect('../')
+
+
+
+def signup(request):
+    if request.method == 'POST':
+        sname = request.POST['sname']
+        semail = request.POST['semail']
+        smobile = request.POST['smobile']
+        password = request.POST['spassword']
+        print(semail, password, sname, smobile)
+        user = Student(sname=sname, semail=semail, smobile=smobile, password=password)
+        user.save()
+        return redirect('../')
+    return redirect('../')
+
+
+
+def login(request):
+    if request.method == "POST":
+        e = request.POST['email']
+        pas = request.POST['pas']
+        try:
+            user = Student.objects.get(semail=e, password=pas)
+            request.session['userid'] = user.id
+            return redirect("../student/")
+        except:
+            return redirect("../")
+    return redirect("../")
+
+
+def logout(request):
+    try:
+        del request.session['userid']
+        return redirect('../')
+    except:
+        return redirect("../")
+
+
+
+

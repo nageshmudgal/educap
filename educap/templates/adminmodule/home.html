@@ -1,0 +1,51 @@
+{% extends "./base.html" %}
+{% block content %}
+<script>
+    var di = {"key":"{{states.count}}"}
+    console.log(di)
+    console.log("{{states.count}}")
+</script>
+<div class="row shadow p-3 mb-3 bg-body rounded m-1 border">
+<h2>Dashboard</h2>
+</div>
+<div class="row shadow p-3 bg-body rounded m-1 border mb-4 mx-auto" style="height: 30%; width: 95%;">
+    <img src="../media/graph.jpg" style="height: 100%; " >
+</div>
+
+<div class="row m-1">
+    <div class="col shadow p-3 mb-5 bg-body rounded mx-4">
+        <h3 class="text-center">Total Donations: {{donation.amount__sum}}</h3>
+        
+    </div>
+    <!-- <div class="col shadow p-3 mb-5 bg-body rounded mx-4">
+        <h3 class="text-center">States: {{states.count}}</h3>
+        
+    </div>
+    <div class="col shadow p-3 mb-5 bg-body rounded mx-4">
+        <h3 class="text-center">Cities: {{cities.count}}</h3>
+        
+    </div> -->
+    <div class="col shadow p-3 mb-5 bg-body rounded mx-4">
+        <h3 class="text-center">All Branches: {{branches.count}}</h3>
+        
+    </div>
+    
+</div>
+
+<div class="row m-1">
+<div class="col shadow p-3  bg-body rounded mx-4">
+    <h3 class="text-center">Active Members: {{members.count}}</h3>
+    
+</div>
+<div class="col shadow p-3 bg-body rounded mx-4">
+    <h3 class="text-center">Connected Organisations: {{organisations.count}}</h3>
+    
+</div>
+<div class="col shadow p-3 bg-body rounded mx-4">
+    <h3 class="text-center">Running Campaigns: {{campaigns.count}}</h3>
+    
+</div>
+</div>
+
+
+{% endblock %}

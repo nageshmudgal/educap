@@ -1,5 +1,6 @@
-from django.shortcuts import render,redirect
-from .models import Admins
+from django.shortcuts import render,redirect,HttpResponse
+from .models import Admins,Course
+from django.core.paginator import Paginator
 
 
 def home(request):
@@ -8,7 +9,7 @@ def home(request):
             admin = Admins.objects.get(id=request.session['userid'])
 
             params = {"admin": admin}
-            return render(request, "admin/homes.html", params)
+            return render(request, "adminmodule/home.html", params)
         else:
             return redirect('../adminmodule/login')
     except:
@@ -27,7 +28,7 @@ def login(request):
         except:
             return redirect("../adminmodule/login")
 
-    return render(request,'admin/login.html')
+    return render(request,'adminmodule/login.html')
 
 def logout(request):
     try:
@@ -35,4 +36,36 @@ def logout(request):
         return redirect('../')
     except:
         return redirect("../adminmodule/login")
+
+
+def course(request):
+    try:
+
+        if request.method == "POST":
+            name = request.POST['name']
+            d = request.POST['desc']
+            ins = Course(name=name, desc=d)
+            ins.save()
+
+        courses = Course.objects.filter(status="active")
+
+        member_paginator = Paginator(courses, 8)
+
+        page_num = request.GET.get('page')
+
+        page = member_paginator.get_page(page_num)
+
+        params = {"courses": page, "admin": Admins.objects.get(id=request.session['userid'])}
+
+        return render(request, 'adminmodule/course.html', params)
+    except:
+        return redirect('../adminmodule/login')
+
+def deleteinstance(request):
+    if request.GET['op']=='1':
+        b = request.GET['data']
+        Course.objects.filter(pk=b).update(status="deleted")
+        return redirect('course')
+
+    return HttpResponse("Error")
 
