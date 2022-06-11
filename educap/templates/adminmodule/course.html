@@ -115,8 +115,8 @@
       <td>
 
         <div class="d-flex align-items-center">
-          <button type="button" class="btn btn-success btn-sm btn-icon-text mr-3" onclick="filldata({'pk':'{{i.pk}}','name':'{{i.name}}','email':'{{i.email}}','address':'{{i.address}}','post':'{{i.post.pk}}'})" data-bs-toggle="modal" data-bs-target="#editMemberModal">
-            View
+          <button type="button" class="btn btn-danger btn-sm btn-icon-text">
+            <a name="delete" href="../adminmodule/viewcourse?data={{i.pk}}" style="text-decoration:None; color:white;">View</a>
             <i class="typcn typcn-edit btn-icon-append"></i>
           </button>
           <button type="button" class="btn btn-success btn-sm btn-icon-text mr-3" onclick="filldata({'pk':'{{i.pk}}','name':'{{i.name}}','email':'{{i.email}}','address':'{{i.address}}','post':'{{i.post.pk}}'})" data-bs-toggle="modal" data-bs-target="#editMemberModal">
@@ -124,12 +124,10 @@
             <i class="typcn typcn-edit btn-icon-append"></i>
           </button>
           <button type="button" class="btn btn-danger btn-sm btn-icon-text">
-            <a name="delete" href="../adminmodule/deleteinstance?data={{i.pk}}&op=1"
-              style="text-decoration:None; color:white;">Delete</a>
+            <a name="delete" href="../adminmodule/deleteinstance?data={{i.pk}}&op=1"  style="text-decoration:None; color:white;">Delete</a>
             <i class="typcn typcn-delete-outline btn-icon-append"></i>
           </button>
         </div>
-
       </td>
     </tr>
     {% endfor %}
@@ -152,7 +150,5 @@ There is no Courses
   {% endif %}
   </ul>
 </nav>
-
-
 
 {% endblock %}

@@ -18,3 +18,9 @@ class Course(models.Model):
 
     def __str__(self):
         return self.name
+
+class File(models.Model):
+    cid = models.ForeignKey(Course,on_delete=models.CASCADE)
+    file = models.FileField(upload_to="course_files/", default='')
+    status = models.CharField(max_length=10, default="active")
+

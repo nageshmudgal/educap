@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect,HttpResponse
-from .models import Admins,Course
+from .models import Admins,Course,File
 from django.core.paginator import Paginator
 
 
@@ -58,6 +58,20 @@ def course(request):
         params = {"courses": page, "admin": Admins.objects.get(id=request.session['userid'])}
 
         return render(request, 'adminmodule/course.html', params)
+    except:
+        return redirect('../adminmodule/login')
+
+
+def viewcourse(request):
+    try:
+        data = request.GET['data']
+        c = Course.objects.get(pk=data)
+        f = File.objects.filter(cid=c,status="active")
+
+        params = {'course': c,"files":f, "admin": Admins.objects.get(id=request.session['userid'])}
+
+        return render(request, 'adminmodule/viewcourse.html', params)
+
     except:
         return redirect('../adminmodule/login')
 
