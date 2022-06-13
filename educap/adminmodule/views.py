@@ -61,7 +61,6 @@ def course(request):
     except:
         return redirect('../adminmodule/login')
 
-
 def viewcourse(request):
     try:
         data = request.GET['data']
