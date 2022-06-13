@@ -6,10 +6,7 @@ from .models import Student
 def homes(request):
     try:
         if request.session['userid'] != "":
-            student = Student.objects.get(id=request.session['userid'])
-
-            params = {"student": student}
-            return render(request, "student/homes.html", params)
+            return redirect('../')
         else:
             return redirect('../')
     except:

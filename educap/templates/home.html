@@ -198,6 +198,7 @@
                 </div>
             </div>
         </div>
+
         <!--navbar-->
         <div class="intro">
             <nav class="navbar navbar-expand-lg navbar-light bg-transparent">
@@ -226,6 +227,26 @@
 <!--                                <a class="nav-link text-light" href="#">{{request.user.username}}</a>-->
 <!--                            </li>-->
 <!--                            {% endif %}-->
+                            {% if user1 %}
+                            <li class="nav-item dropdown pe-5">
+                                <a class="nav-link dropdown-toggle  text-light"
+                                   href="#"
+                                   id="navbarDropdown"
+                                   role="button"
+                                   data-bs-toggle="dropdown"
+                                   aria-expanded="false">
+                                    {{user1.sname}}
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <li>
+                                        <a
+                                           class="dropdown-item"
+                                           href="../student/logout">Logout</a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            {% else %}
                             <li class="nav-item dropdown pe-5">
                                 <a class="nav-link dropdown-toggle  text-light"
                                    href="#"
@@ -274,6 +295,7 @@
                                     </li>
                                 </ul>
                             </li>
+                            {% endif %}
                         </ul>
                         <form class="d-flex">
                             <input class="form-control me-2 rounded-pill"

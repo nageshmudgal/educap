@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect,HttpResponse
-from .models import Admins,Course,File
+from .models import Admins,Course,Notes,Assignment,Video
 from django.core.paginator import Paginator
 
 
@@ -66,8 +66,13 @@ def viewcourse(request):
     try:
         data = request.GET['data']
         c = Course.objects.get(pk=data)
-        f = File.objects.filter(cid=c,status="active")
-
+        n = Notes.objects.filter(cid=c,status="active")
+        a = Assignment.objects.filter(cid=c, status="active")
+        v = Video.objects.filter(cid=c, status="active")
+        f = Video.objects.filter(cid=0, status="active")
+        f=f.union(n,a,v)
+        print(f)
+        # "notes":n,"assignments":a,"videos":v,
         params = {'course': c,"files":f, "admin": Admins.objects.get(id=request.session['userid'])}
 
         return render(request, 'adminmodule/viewcourse.html', params)

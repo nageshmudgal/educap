@@ -1,10 +1,17 @@
 from django.shortcuts import HttpResponse,render,redirect
 from django.contrib.auth.models import User
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
+from student.models import Student
 
 def home(request):
-    return render(request,"home.html")
+    try:
+        user1 = Student.objects.get(id=request.session['userid'])
+
+        params = {"user1": user1}
+        print("yes")
+        return render(request,"home.html",params)
+    except:
+        return render(request, "home.html")
 
 def studentRegistration(request):
     if request.method=='POST':

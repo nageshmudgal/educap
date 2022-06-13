@@ -19,8 +19,20 @@ class Course(models.Model):
     def __str__(self):
         return self.name
 
-class File(models.Model):
+class Notes(models.Model):
     cid = models.ForeignKey(Course,on_delete=models.CASCADE)
-    file = models.FileField(upload_to="course_files/", default='')
+    name = models.CharField(max_length=50,default="abc")
+    file = models.FileField(upload_to="notes/", default='')
     status = models.CharField(max_length=10, default="active")
 
+class Assignment(models.Model):
+    cid = models.ForeignKey(Course,on_delete=models.CASCADE)
+    name = models.CharField(max_length=50,default="abc")
+    file = models.FileField(upload_to="assignments/", default='')
+    status = models.CharField(max_length=10, default="active")
+
+class Video(models.Model):
+    cid = models.ForeignKey(Course,on_delete=models.CASCADE)
+    name = models.CharField(max_length=50,default="abc")
+    file = models.FileField(upload_to="videos/", default='')
+    status = models.CharField(max_length=10, default="active")
