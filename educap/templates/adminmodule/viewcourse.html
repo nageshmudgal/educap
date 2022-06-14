@@ -15,19 +15,20 @@
 
 
 <!-- add file Modal -->
-<div class="modal fade" id="addCourseModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="addAssignmentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Add Course</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Add Assignment</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form action="../adminmodule/course" method="post" enctype="multipart/form-data">
+        <form action="../adminmodule/assignment" method="post" enctype="multipart/form-data">
+          <input type="text" name="cid" value={{course.id}} hidden>
           <p>Course Name:</p>
           <input type="text" name="name" required><br>
-          <p>Descriotion:</p>
-          <input type="text" name="desc" required><br>
+          <p>File:</p>
+          <input type="file" name="assignment" required><br>
 
 
           {% csrf_token %}
@@ -86,15 +87,17 @@
 </div>
 
 <!-- Button trigger modal -->
-<div style="margin-left: 89%;">
+<div style="margin-left: 86%;">
   <button style="align-items: left;" type="button" class="btn btn-primary" data-bs-toggle="modal"
-    data-bs-target="#addCourseModal">
-    Add File
+    data-bs-target="#addAssignmentModal">
+    Add Assignment
   </button>
 </div>
-<br>
 
 
+
+
+<div class="overflow-auto" style="height: 540px;">
 {% if files %}
 <div class="container">
   <div class="row">
@@ -147,5 +150,5 @@
     {% endif %}
   </ul>
 </nav>
-
+</div>
 {% endblock %}

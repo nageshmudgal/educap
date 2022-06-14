@@ -79,6 +79,17 @@ def viewcourse(request):
     except:
         return redirect('../adminmodule/login')
 
+def assignment(request):
+    if request.method == "POST":
+        cid = request.POST['cid']
+        name = request.POST['name']
+        f = request.FILES.get('assignment')
+        print(name)
+        c = Course.objects.get(id=cid)
+        ins = Assignment(cid=c, name=name, file=f)
+        ins.save()
+    return redirect("course")
+
 def deleteinstance(request):
     if request.GET['op']=='1':
         b = request.GET['data']
