@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home,name='index'),
     path('student/',include('student.urls')),
+    path('viewcourse', views.viewcourse,name='viewcourse'),
     path('faculty/', include('faculty.urls')),
     path('adminmodule/', include('adminmodule.urls')),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)+static(settings.STATIC_URL,

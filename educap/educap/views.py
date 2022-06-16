@@ -2,16 +2,19 @@ from django.shortcuts import HttpResponse,render,redirect
 from django.contrib.auth.models import User
 from django.contrib import messages
 from student.models import Student
+from adminmodule.models import Course,Assignment,Notes,Video
 
 def home(request):
+    courses = Course.objects.all()
+    params = {'courses':courses}
     try:
         user1 = Student.objects.get(id=request.session['userid'])
 
-        params = {"user1": user1}
+        params["user1"] = user1
         print("yes")
         return render(request,"home.html",params)
     except:
-        return render(request, "home.html")
+        return render(request, "home.html",params)
 
 def studentRegistration(request):
     if request.method=='POST':
@@ -47,3 +50,17 @@ def student_login(request):
             messages.warning(request,'Invalid credentials')
             return render(request,"home.html")
     return redirect("/")
+
+def viewcourse(request):
+    try:
+        user1 = Student.objects.get(id=request.session['userid'])
+        data = request.GET['data']
+        c = Course.objects.get(pk=data)
+        n = Notes.objects.filter(cid=c,status="active")
+        a = Assignment.objects.filter(cid=c, status="active")
+        v = Video.objects.filter(cid=c, status="active")
+        params = {'course': c,"notes":n,"assignments":a,"videos":v,"user1":user1}
+        return render(request,"viewcourse.html",params)
+    except:
+        messages.warning(request,'Login First')
+        return redirect('../')

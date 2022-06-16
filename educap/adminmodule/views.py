@@ -68,11 +68,8 @@ def viewcourse(request):
         n = Notes.objects.filter(cid=c,status="active")
         a = Assignment.objects.filter(cid=c, status="active")
         v = Video.objects.filter(cid=c, status="active")
-        f = Video.objects.filter(cid=0, status="active")
-        f=f.union(n,a,v)
-        print(f)
         # "notes":n,"assignments":a,"videos":v,
-        params = {'course': c,"files":f, "admin": Admins.objects.get(id=request.session['userid'])}
+        params = {'course': c,"notes":n,"assignments":a,"videos":v, "admin": Admins.objects.get(id=request.session['userid'])}
 
         return render(request, 'adminmodule/viewcourse.html', params)
 
@@ -90,11 +87,33 @@ def assignment(request):
         ins.save()
     return redirect("course")
 
+def editassignment(request):
+    try:
+        if request.session['userid'] !="":
+            if request.method == "POST":
+                cid = request.POST['cid']
+                n = request.POST['name']
+                f = request.FILES.get('assignment')
+                
+                Assignment.objects.filter(id=cid).update(name=n)
+                Assignment.objects.filter(id=cid).update(file=f)
+                
+                # if f:
+                #     image_path = f.file.path
+                #     if os.path.exists(image_path):
+                #         os.remove(image_path)
+                #     Assignment.objects.filter(id=cid).update(file=f)
+
+            return redirect('../adminmodule/course')
+        else:
+            return redirect('../adminmodule')
+    except:
+        return redirect('../adminmodule')
+
 def deleteinstance(request):
     if request.GET['op']=='1':
         b = request.GET['data']
         Course.objects.filter(pk=b).update(status="deleted")
         return redirect('course')
-
     return HttpResponse("Error")
 

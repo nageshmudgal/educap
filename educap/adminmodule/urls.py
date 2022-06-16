@@ -11,5 +11,6 @@ urlpatterns = [
      path("deleteinstance",views.deleteinstance,name='deleteinstance'),
      path("course",views.course,name='course'),
      path("assignment",views.assignment,name='assignment'),
+     path("editassignment",views.editassignment,name='editassignment'),
      path("viewcourse",views.viewcourse,name='viewcourse'),
 ]
