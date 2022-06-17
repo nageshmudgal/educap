@@ -3,130 +3,120 @@
 
 
 <div class="mx-auto mb-5 fs-5 bold" style="width: 200px;">
-    <h1>{{course.name}}</h1>
+  <h1>{{course.name}}</h1>
 </div>
 
 
-    {% if notes %}
-    <div class="container mb-5">
-        <div class="mb-2  fs-5 bold" style="width: 200px;">
-            <h1>Notes</h1>
+{% if notes %}
+<div class="container mb-5">
+  <div class="mb-2  fs-5 bold" style="width: 200px;">
+    <h1>Notes</h1>
+  </div>
+  <div class="row">
+
+
+    {% for i in notes %}
+    <div class="col-4">
+
+      <div class="card mt-4" style="width: 18rem;">
+        <div class="ratio ratio-4x3">
+          <!-- <iframe src="../media/4151486.png" scrolling="no" style="overflow:auto;" seamless="seamless" title="course file"></iframe> -->
+          <img src="../media/4151486.png">
         </div>
-      <div class="row">
-        
-    
-          {% for i in notes %}
-        <div class="col-4">
-    
-          <div class="card mt-4" style="width: 18rem;">
-            <div class="ratio ratio-16x9">
-              <iframe src="../media/{{i.file}}" title="course file" allowfullscreen></iframe>
-            </div>
-    
-            <div class="card-body">
-              <p class="card-text">{{i.file}}</p>
-              <div class="d-flex align-items-center">
-                <button type="button" class="btn btn-success btn-sm btn-icon-text me-2">
-                  <a name="delete" href="../adminmodule/viewcourse?data={{i.pk}}"
-                    style="text-decoration:None; color:white;">View</a>
-                </button>
-                <button type="button" class="btn btn-danger btn-sm btn-icon-text">
-                  <a name="delete" href="../adminmodule/deleteinstance?data={{i.pk}}&op=1"
-                    style="text-decoration:None; color:white;">Delete</a>
-                </button>
-              </div>
-            </div>
-    
+
+        <div class="card-body">
+          <p class="card-text">{{i.name}}</p>
+          <div class="d-flex align-items-center">
+            <button type="button" class="btn btn-success btn-sm btn-icon-text me-2">
+              <a href="../media/{{i.file}}" style="text-decoration:none; color: #ffffff;" target="_blank"
+                class="mx-2"><b>VIEW</b></a>
+            </button>
           </div>
         </div>
-        {% endfor %}
-    
+
       </div>
     </div>
-    {% else %}
+    {% endfor %}
 
-    {% endif %}
+  </div>
+</div>
+{% else %}
+
+{% endif %}
 
 
 
 
-    {% if assignments %}
-    <div class="container mb-5">
-        <div class="mb-2 fs-5 bold" style="width: 200px;">
-            <h1>Assignments</h1>
+{% if assignments %}
+<div class="container mb-5">
+  <div class="mb-2 fs-5 bold" style="width: 200px;">
+    <h1>Assignments</h1>
+  </div>
+  <div class="row">
+
+
+    {% for i in assignments %}
+    <div class="col-4">
+
+      <div class="card mt-4" style="width: 18rem;">
+        <div class="ratio ratio-4x3">
+          <!-- <iframe src="../media/{{i.file}}" title="course file" allowfullscreen></iframe> -->
+          <img src="../media/4151486.png">
         </div>
-      <div class="row">
-        
-    
-          {% for i in assignments %}
-        <div class="col-4">
-    
-          <div class="card mt-4" style="width: 18rem;">
-            <div class="ratio ratio-16x9">
-              <iframe src="../media/{{i.file}}" title="course file" allowfullscreen></iframe>
-            </div>
-    
-            <div class="card-body">
-              <p class="card-text">{{i.file}}</p>
-              <div class="d-flex align-items-center">
-                <button type="button" class="btn btn-success btn-sm btn-icon-text me-2">
-                  <a name="delete" href="../adminmodule/viewcourse?data={{i.pk}}"
-                    style="text-decoration:None; color:white;">View</a>
-                </button>
-                <button type="button" class="btn btn-danger btn-sm btn-icon-text">
-                  <a name="delete" href="../adminmodule/deleteinstance?data={{i.pk}}&op=1"
-                    style="text-decoration:None; color:white;">Delete</a>
-                </button>
-              </div>
-            </div>
-    
+
+        <div class="card-body">
+          <p class="card-text">{{i.name}}</p>
+          <div class="d-flex align-items-center">
+            <button type="button" class="btn btn-success btn-sm btn-icon-text me-2">
+              <a href="../media/{{i.file}}" style="text-decoration:none; color: #ffffff;" target="_blank"
+                class="mx-2"><b>VIEW</b></a>
+            </button>
           </div>
         </div>
-        {% endfor %}
-    
+
       </div>
     </div>
-    {% else %}
+    {% endfor %}
 
-    {% endif %}
+  </div>
+</div>
+{% else %}
 
-    {% if videos %}
-    <div class="container mb-5">
-        <div class="mb-2 fs-5 bold" style="width: 200px;">
-            <h1>Videos</h1>
+{% endif %}
+
+{% if videos %}
+<div class="container mb-5">
+  <div class="mb-2 fs-5 bold" style="width: 200px;">
+    <h1>Videos</h1>
+  </div>
+  <div class="row">
+
+
+    {% for i in videos %}
+    <div class="col-4">
+
+      <div class="card mt-4" style="width: 18rem;">
+        <div class="ratio ratio-16x9">
+          <iframe src="../media/{{i.file}}" title="course file" allowfullscreen></iframe>
         </div>
-      <div class="row">
-        
-    
-          {% for i in videos %}
-        <div class="col-4">
-    
-          <div class="card mt-4" style="width: 18rem;">
-            <div class="ratio ratio-16x9">
-              <iframe src="../media/{{i.file}}" title="course file" allowfullscreen></iframe>
-            </div>
-    
-            <div class="card-body">
-              <p class="card-text">{{i.file}}</p>
-              <div class="d-flex align-items-center">
-                <button type="button" class="btn btn-success btn-sm btn-icon-text me-2">
-                  <a name="delete" href="../adminmodule/viewcourse?data={{i.pk}}"
-                    style="text-decoration:None; color:white;">View</a>
-                </button>
-                <button type="button" class="btn btn-danger btn-sm btn-icon-text">
-                  <a name="delete" href="../adminmodule/deleteinstance?data={{i.pk}}&op=1"
-                    style="text-decoration:None; color:white;">Delete</a>
-                </button>
-              </div>
-            </div>
-    
+
+        <div class="card-body">
+          <p class="card-text">{{i.name}}</p>
+          <div class="d-flex align-items-center">
+            <button type="button" class="btn btn-success btn-sm btn-icon-text me-2">
+              <a href="../media/{{i.file}}" style="text-decoration:none; color: #ffffff;" target="_blank"
+                class="mx-2"><b>VIEW</b></a>
+            </button>
           </div>
         </div>
-        {% endfor %}
-    
+
       </div>
     </div>
-    {% else %}
+    {% endfor %}
 
-    {% endif %}
+  </div>
+</div>
+{% else %}
+
+{% endif %}
 {% endblock %}

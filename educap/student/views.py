@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Student
+from django.contrib import messages
 
 
 # Create your views here.
@@ -11,8 +12,6 @@ def homes(request):
             return redirect('../')
     except:
         return redirect('../')
-
-
 
 def signup(request):
     if request.method == 'POST':
@@ -51,3 +50,49 @@ def logout(request):
 
 
 
+
+import os
+def profileupdate(request):
+    try:
+        if request.session['userid'] !="":
+            user1 = Student.objects.get(id=request.session['userid'])
+            if request.method == "POST":
+                print("yes uesr")
+                n = request.POST['name']
+                e = request.POST['email']
+                m = request.POST['mobile']
+                print(n,e,m)
+                Student.objects.filter(id=request.session['userid']).update(sname=n)
+                Student.objects.filter(id=request.session['userid']).update(semail=e)
+                Student.objects.filter(id=request.session['userid']).update(smobile=m)
+                # if i:
+                #     image_path = user1.img.path
+                #     if os.path.exists(image_path):
+                #         os.remove(image_path)
+                #     user1.img=i
+                #     user1.save()
+            return redirect('../student')
+        else:
+            return redirect('../student')
+    except:
+        return redirect('../student')
+
+
+def changepass(request):
+    try:
+        if request.session['userid'] !="":
+            user1 = Student.objects.get(id=request.session['userid'])
+            if request.method == "POST":
+                pas1 = request.POST['pas1']
+                pas2 = request.POST['pas2']
+                print
+                if pas1!=user1.password:
+                    messages.warning(request,"old password isn't matching")
+                    print("yeah")
+                    return redirect('../student')
+                Student.objects.filter(id=request.session['userid']).update(password=pas2)
+            return redirect('../student')
+        else:
+            return redirect('../student')
+    except:
+        return redirect('../student')

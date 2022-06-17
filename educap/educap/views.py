@@ -11,7 +11,6 @@ def home(request):
         user1 = Student.objects.get(id=request.session['userid'])
 
         params["user1"] = user1
-        print("yes")
         return render(request,"home.html",params)
     except:
         return render(request, "home.html",params)
