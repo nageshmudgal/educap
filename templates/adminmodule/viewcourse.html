@@ -1,0 +1,371 @@
+{% extends "./base.html" %}
+{% block content %}
+
+<script>
+  function filldata1(names) {
+    document.getElementById("editid1").value = names.pk
+    document.getElementById("editname1").value = names.name
+    document.getElementById("editfile1").value = names.file
+    console.log(names.file)
+
+  }
+  function filldata2(names) {
+    document.getElementById("editid2").value = names.pk
+    document.getElementById("editname2").value = names.name
+    document.getElementById("editfile2").value = names.file
+    console.log(names.file)
+  }
+  function filldata3(names) {
+    document.getElementById("editid3").value = names.pk
+    document.getElementById("editname3").value = names.name
+    document.getElementById("editfile3").value = names.file
+  }
+</script>
+
+
+
+<!-- add assignment Modal -->
+<div class="modal fade" id="addAssignmentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add Assignment</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="../adminmodule/assignment" method="post" enctype="multipart/form-data">
+          <input type="text" name="cid" value={{course.id}} hidden>
+          <p>Course Name:</p>
+          <input type="text" name="name" required><br>
+          <p>File:</p>
+          <input type="file" name="assignment" required><br>
+
+
+          {% csrf_token %}
+          <div class="modal-footer">
+            <input type="submit" class="btn btn-primary" value="Add"><br>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- add Notes Modal -->
+<div class="modal fade" id="addNotesModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add Notes</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="../adminmodule/notes" method="post" enctype="multipart/form-data">
+          <input type="text" name="cid" value={{course.id}} hidden>
+          <p>Course Name:</p>
+          <input type="text" name="name" required><br>
+          <p>File:</p>
+          <input type="file" name="notes" required><br>
+
+
+          {% csrf_token %}
+          <div class="modal-footer">
+            <input type="submit" class="btn btn-primary" value="Add"><br>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- add Video Modal -->
+<div class="modal fade" id="addVideoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add Notes</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="../adminmodule/video" method="post" enctype="multipart/form-data">
+          <input type="text" name="cid" value={{course.id}} hidden>
+          <p>Course Name:</p>
+          <input type="text" name="name" required><br>
+          <p>File:</p>
+          <input type="file" name="video" required><br>
+
+
+          {% csrf_token %}
+          <div class="modal-footer">
+            <input type="submit" class="btn btn-primary" value="Add"><br>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- update assignment Modal -->
+<div class="modal fade" id="editAssignmentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit Assignment</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="../adminmodule/editassignment" method="post" enctype="multipart/form-data">
+          <input type="text" name="cid" id="editid1" hidden>
+          <p>Course Name:</p>
+          <input type="text" name="name" id="editname1" required><br>
+          <p>File:</p>
+          <input type="file" name="assignment" id="editfile1"><br>
+
+
+          {% csrf_token %}
+          <div class="modal-footer">
+            <input type="submit" class="btn btn-primary" value="Add"><br>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- update Notes Modal -->
+<div class="modal fade" id="editNotesModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit Notes</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="../adminmodule/editNotes" method="post" enctype="multipart/form-data">
+          <input type="text" name="cid" id="editid2" hidden>
+          <p>Course Name:</p>
+          <input type="text" name="name" id="editname2" required><br>
+          <p>File:</p>
+          <input type="file" name="notes" id="editfile2"><br>
+
+
+          {% csrf_token %}
+          <div class="modal-footer">
+            <input type="submit" class="btn btn-primary" value="Add"><br>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- update video Modal -->
+<div class="modal fade" id="editvideoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit video</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="../adminmodule/editvideo" method="post" enctype="multipart/form-data">
+          <input type="text" name="cid" id="editid3" hidden>
+          <p>Course Name:</p>
+          <input type="text" name="name" id="editname3" required><br>
+          <p>File:</p>
+          <input type="file" name="video" id="editfile3"><br>
+          {% csrf_token %}
+          <div class="modal-footer">
+            <input type="submit" class="btn btn-primary" value="Add"><br>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="row shadow p-3 mb-3 bg-body rounded m-1 border">
+  <h2>{{course.name}} Files</h2>
+</div>
+
+<!-- Button trigger modal assignment-->
+<div style="margin-left: 69%;">
+  <button style="align-items: left;" type="button" class="btn btn-primary" data-bs-toggle="modal"
+    data-bs-target="#addAssignmentModal">
+    Add Assignment
+  </button>
+
+<!-- Button trigger modal notes -->
+  <button style="align-items: left;" type="button" class="btn btn-primary style" data-bs-toggle="modal"
+    data-bs-target="#addNotesModal">
+    Add Notes
+  </button>
+
+<!-- Button trigger modal Videos -->
+
+  <button style="align-items: left;" type="button" class="btn btn-primary" data-bs-toggle="modal"
+    data-bs-target="#addVideoModal">
+    Add video
+  </button>
+</div>
+
+
+<div class="overflow-auto" style="height: 551px;">
+
+<h3>Notes</h3>
+{% if notes %}
+<table class="table table-striped project-orders-table shadow p-3 mb-3 bg-body border rounded">
+  <thead>
+    <tr>
+      <th class="ml-5">SNo.</th>
+      <th style="width: 50%;">Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for i in notes %}
+    <tr>
+      <td>{{forloop.counter}}</td>
+      <td>{{i.name}}</td>
+      <td>
+
+        <div class="d-flex align-items-center">
+          <button type="button" class="btn btn-success btn-sm btn-icon-text">
+            <a href="../media/{{i.file}}" style="text-decoration:none; color: #ffffff;" target="_blank"
+              class="mx-2"><b>VIEW</b></a>
+          </button>
+          <button type="button" class="btn btn-info btn-sm btn-icon-text ms-2"
+            onclick="filldata2({'pk':'{{i.pk}}','name':'{{i.name}}','file':'{{i.file}}'})" data-bs-toggle="modal"
+            data-bs-target="#editNotesModal">
+            Edit
+            <i class="typcn typcn-edit btn-icon-append"></i>
+          </button>
+          <button type="button" class="btn btn-danger btn-sm btn-icon-text ms-2">
+            <a name="delete" href="../adminmodule/deleteinstance?data={{i.pk}}&op=2"
+              style="text-decoration:None; color:white;">Delete</a>
+            <i class="typcn typcn-delete-outline btn-icon-append"></i>
+          </button>
+        </div>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<h3 class="mx-auto" style="width: 400px;">
+  There is no Notes
+</h3>
+{% endif %}
+
+<br>
+<h3>Assignments</h3>
+{% if assignments %}
+<table class="table table-striped project-orders-table shadow p-3 mb-3 bg-body border rounded">
+  <thead>
+    <tr>
+      <th class="ml-5">SNo.</th>
+      <th style="width: 50%;">Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for i in assignments %}
+    <tr>
+      <td>{{forloop.counter}}</td>
+      <td>{{i.name}}</td>
+      <td>
+
+        <div class="d-flex align-items-center">
+          <button type="button" class="btn btn-success btn-sm btn-icon-text">
+            <a href="../media/{{i.file}}" style="text-decoration:none; color: #ffffff;" target="_blank"
+              class="mx-2"><b>VIEW</b></a>
+          </button>
+          <button type="button" class="btn btn-info btn-sm btn-icon-text ms-2"
+            onclick="filldata1({'pk':'{{i.pk}}','name':'{{i.name}}','file':'{{i.file}}'})" data-bs-toggle="modal"
+            data-bs-target="#editAssignmentModal">
+            Edit
+            <i class="typcn typcn-edit btn-icon-append"></i>
+          </button>
+          <button type="button" class="btn btn-danger btn-sm btn-icon-text ms-2">
+            <a name="delete" href="../adminmodule/deleteinstance?data={{i.pk}}&op=3"
+              style="text-decoration:None; color:white;">Delete</a>
+            <i class="typcn typcn-delete-outline btn-icon-append"></i>
+          </button>
+        </div>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<h3 class="mx-auto" style="width: 400px;">
+  There is no Assignments
+</h3>
+{% endif %}
+
+
+<br>
+<h3>Videos</h3>
+{% if videos %}
+<table class="table table-striped project-orders-table shadow p-3 mb-3 bg-body border rounded">
+  <thead>
+    <tr>
+      <th class="ml-5">SNo.</th>
+      <th style="width: 50%;">Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for i in videos %}
+    <tr>
+      <td>{{forloop.counter}}</td>
+      <td>{{i.name}}</td>
+      <td>
+
+        <div class="d-flex align-items-center">
+          <button type="button" class="btn btn-success btn-sm btn-icon-text">
+            <a href="../media/{{i.file}}" style="text-decoration:none; color: #ffffff;" target="_blank"
+              class="mx-2"><b>VIEW</b></a>
+          </button>
+          <button type="button" class="btn btn-info btn-sm btn-icon-text ms-2"
+            onclick="filldata3({'pk':'{{i.pk}}','name':'{{i.name}}','file':'{{i.file}}'})" data-bs-toggle="modal"
+            data-bs-target="#editvideoModal">
+            Edit
+            <i class="typcn typcn-edit btn-icon-append"></i>
+          </button>
+          <button type="button" class="btn btn-danger btn-sm btn-icon-text ms-2">
+            <a name="delete" href="../adminmodule/deleteinstance?data={{i.pk}}&op=4"
+              style="text-decoration:None; color:white;">Delete</a>
+            <i class="typcn typcn-delete-outline btn-icon-append"></i>
+          </button>
+        </div>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<h3 class="mx-auto" style="width: 400px;">
+  There is no Videos
+</h3>
+{% endif %}
+
+<!-- <nav aria-label="Page navigation example">
+  <ul class="pagination" class="mx-auto">
+    {% if members.has_previous %}
+    <li class="page-item"><a class="page-link"
+        href="{% url 'member' %}?page={{ members.previous_page_number }}">Previous</a></li>
+    {% endif %}
+    <li class="page-item"><a class="page-link" href="#">{{members.number}}</a></li>
+    {% if members.has_next %}
+    <li class="page-item"><a class="page-link" href="{% url 'member' %}?page={{ members.next_page_number }}">Next</a>
+    </li>
+    {% endif %}
+  </ul>
+</nav> -->
+
+
+</div>
+{% endblock %}
