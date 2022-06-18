@@ -6,7 +6,8 @@ from adminmodule.models import Course,Assignment,Notes,Video
 
 def home(request):
     courses = Course.objects.all()
-    params = {'courses':courses}
+    # params = {'courses':courses}
+    params ={}
     try:
         user1 = Student.objects.get(id=request.session['userid'])
 
