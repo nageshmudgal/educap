@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+from pathlib import Path
+import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -25,7 +27,7 @@ SECRET_KEY = 'qn5whp6fkc&k91ey0wl$_m#u2=-^703*aumv+482gmptnzd-b8'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['educap.herokuapp.com', 'localhost']
 
 
 # Application definition
@@ -43,6 +45,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -82,6 +85,12 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+import dj_database_url
+
+DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
+DATABASES['default'] = dj_database_url.config(default='postgres://kksxalixdqhpha:be45f091d9b994087babc55c000491197575ba3b2c5553944642fe0d95c5d02d@ec2-54-157-16-196.compute-1.amazonaws.com:5432/dbdvt9ae3hf3q0')
+# DATABASES['default'] = dj_database_url.parse('postgres://dmhdnoajokexxq:126cb18974c8cb5b08437a023c99eb446ad3dd60c99dcd8db3553e8b2b92368e@ec2-54-89-105-122.compute-1.amazonaws.com:5432/d9bktjlfi6bcob', conn_max_age=600)
 
 
 # Password validation
