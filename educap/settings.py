@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
-import os
+import django_heroku
 from pathlib import Path
 import os
 
@@ -90,7 +90,7 @@ import dj_database_url
 
 DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 DATABASES['default'] = dj_database_url.config(default='postgres://kksxalixdqhpha:be45f091d9b994087babc55c000491197575ba3b2c5553944642fe0d95c5d02d@ec2-54-157-16-196.compute-1.amazonaws.com:5432/dbdvt9ae3hf3q0')
-# DATABASES['default'] = dj_database_url.parse('postgres://dmhdnoajokexxq:126cb18974c8cb5b08437a023c99eb446ad3dd60c99dcd8db3553e8b2b92368e@ec2-54-89-105-122.compute-1.amazonaws.com:5432/d9bktjlfi6bcob', conn_max_age=600)
+# # DATABASES['default'] = dj_database_url.parse('postgres://dmhdnoajokexxq:126cb18974c8cb5b08437a023c99eb446ad3dd60c99dcd8db3553e8b2b92368e@ec2-54-89-105-122.compute-1.amazonaws.com:5432/d9bktjlfi6bcob', conn_max_age=600)
 
 
 # Password validation
@@ -134,3 +134,6 @@ STATIC_URL = '/static/'
 
 MEDIA_ROOT=os.path.join(BASE_DIR,'media')
 MEDIA_URL = '/media/'
+
+# Activate Django-Heroku.
+django_heroku.settings(locals())
