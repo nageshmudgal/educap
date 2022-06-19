@@ -1,1 +1,1 @@
-web: gunicorn educap.wsgi --log-file -
+web: gunicorn educap.wsgi:application --log-file - --log-level debug
