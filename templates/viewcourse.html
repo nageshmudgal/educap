@@ -97,17 +97,15 @@
 
       <div class="card mt-4" style="width: 18rem;">
         <div class="ratio ratio-16x9">
-          <iframe src="../media/{{i.file}}" title="course file" allowfullscreen></iframe>
+
+
+          <video width="400" height="350" controlsList="nodownload" controls poster="../media/video-start.png">
+          <source src="../media/{{i.file}}" type="video/mp4">
+          </video>
         </div>
 
         <div class="card-body">
           <p class="card-text">{{i.name}}</p>
-          <div class="d-flex align-items-center">
-            <button type="button" class="btn btn-success btn-sm btn-icon-text me-2">
-              <a href="../media/{{i.file}}" style="text-decoration:none; color: #ffffff;" target="_blank"
-                class="mx-2"><b>VIEW</b></a>
-            </button>
-          </div>
         </div>
 
       </div>
