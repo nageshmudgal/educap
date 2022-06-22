@@ -61,7 +61,7 @@ def viewcourse(request):
         n = Notes.objects.filter(cid=c,status="active")
         a = Assignment.objects.filter(cid=c, status="active")
         v = Video.objects.filter(cid=c, status="active")
-        params = {'course': c,"notes":n,"assignments":a,"videos":v,"user1":user1}
+        params = {'course': c,"notes":n,"assignments":a,"videos":v,"studentuser":user1}
         return render(request,"viewcourse.html",params)
     except:
         messages.warning(request,'Login First')
