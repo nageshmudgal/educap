@@ -55,7 +55,7 @@ def student_login(request):
 
 def viewcourse(request):
     try:
-        user1 = Student.objects.get(id=request.session['userid'])
+        user1 = Student.objects.get(id=request.session['studentuser'])
         data = request.GET['data']
         c = Course.objects.get(pk=data)
         n = Notes.objects.filter(cid=c,status="active")
