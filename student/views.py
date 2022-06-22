@@ -6,7 +6,7 @@ from django.contrib import messages
 # Create your views here.
 def homes(request):
     try:
-        if request.session['userid'] != "":
+        if request.session['studentuser'] != "":
             return redirect('../')
         else:
             return redirect('../')
@@ -20,11 +20,15 @@ def signup(request):
         smobile = request.POST['smobile']
         password = request.POST['spassword']
         print(semail, password, sname, smobile)
+        allemails = Student.objects.values_list("semail",flat=True)
+        if semail in allemails:
+            messages.warning(request, "Email is already registered")
+            return redirect('../')
+
         user = Student(sname=sname, semail=semail, smobile=smobile, password=password)
         user.save()
         return redirect('../')
     return redirect('../')
-
 
 
 def login(request):
@@ -36,7 +40,7 @@ def login(request):
             if user.status=="Inactive":
                 messages.warning(request, "Not Activated by Admin")
                 return redirect("../")
-            request.session['userid'] = user.id
+            request.session['studentuser'] = user.id
             return redirect("../student/")
         except:
             return redirect("../")
@@ -45,7 +49,7 @@ def login(request):
 
 def logout(request):
     try:
-        del request.session['userid']
+        del request.session['studentuser']
         return redirect('../')
     except:
         return redirect("../")
@@ -57,17 +61,16 @@ def logout(request):
 import os
 def profileupdate(request):
     try:
-        if request.session['userid'] !="":
-            user1 = Student.objects.get(id=request.session['userid'])
+        if request.session['studentuser'] !="":
+            user1 = Student.objects.get(id=request.session['studentuser'])
             if request.method == "POST":
-                print("yes uesr")
                 n = request.POST['name']
                 e = request.POST['email']
                 m = request.POST['mobile']
-                print(n,e,m)
-                Student.objects.filter(id=request.session['userid']).update(sname=n)
-                Student.objects.filter(id=request.session['userid']).update(semail=e)
-                Student.objects.filter(id=request.session['userid']).update(smobile=m)
+
+                Student.objects.filter(id=request.session['studentuser']).update(sname=n)
+                Student.objects.filter(id=request.session['studentuser']).update(semail=e)
+                Student.objects.filter(id=request.session['studentuser']).update(smobile=m)
                 # if i:
                 #     image_path = user1.img.path
                 #     if os.path.exists(image_path):
@@ -83,17 +86,16 @@ def profileupdate(request):
 
 def changepass(request):
     try:
-        if request.session['userid'] !="":
-            user1 = Student.objects.get(id=request.session['userid'])
+        if request.session['studentuser'] !="":
+            user1 = Student.objects.get(id=request.session['studentuser'])
             if request.method == "POST":
                 pas1 = request.POST['pas1']
                 pas2 = request.POST['pas2']
                 print
                 if pas1!=user1.password:
                     messages.warning(request,"old password isn't matching")
-                    print("yeah")
                     return redirect('../student')
-                Student.objects.filter(id=request.session['userid']).update(password=pas2)
+                Student.objects.filter(id=request.session['studentuser']).update(password=pas2)
             return redirect('../student')
         else:
             return redirect('../student')

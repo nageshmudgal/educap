@@ -12,6 +12,7 @@ def home(request):
             n = Notes.objects.filter(status="active")
             a = Assignment.objects.filter(status="active")
             v = Video.objects.filter(status="active")
+
             params = {'courses': c,"notes":n,"assignments":a,"videos":v,"admin": admin}
             return render(request, "adminmodule/home.html", params)
         else:

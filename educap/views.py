@@ -7,11 +7,13 @@ from adminmodule.models import Course,Assignment,Notes,Video
 def home(request):
     courses = Course.objects.all()
     params = {'courses':courses}
+
+
     # params ={}
     try:
-        user1 = Student.objects.get(id=request.session['userid'])
+        user = Student.objects.get(id=request.session['studentuser'])
 
-        params["user1"] = user1
+        params["studentuser"] = user
         return render(request,"home.html",params)
     except:
         return render(request, "home.html",params)
