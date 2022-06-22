@@ -33,6 +33,9 @@ def login(request):
         pas = request.POST['pas']
         try:
             user = Student.objects.get(semail=e, password=pas)
+            if user.status=="Inactive":
+                messages.warning(request, "Not Activated by Admin")
+                return redirect("../")
             request.session['userid'] = user.id
             return redirect("../student/")
         except:

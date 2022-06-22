@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect,HttpResponse
 from .models import Admins,Course,Notes,Assignment,Video
 from django.core.paginator import Paginator
+from student.models import Student
 
 
 def home(request):
@@ -207,3 +208,38 @@ def deleteinstance(request):
         return redirect('course')
     return HttpResponse("Error")
 
+
+def showusers(request):
+    try:
+        if request.session['userid'] != "":
+            user = Admins.objects.get(id=request.session['userid'])
+            u = Student.objects.all()
+
+            member_paginator = Paginator(u, 8)
+            page_num = request.GET.get('page')
+            page = member_paginator.get_page(page_num)
+
+            return render(request, 'adminmodule/showusers.html', {"admin": user, "users": page})
+        else:
+
+            return redirect('../adminmodule/login')
+    except:
+        return redirect('../adminmodule/login')
+
+def activateuser(request):
+    try:
+        if request.session['userid'] !="":
+            b = request.GET['data']
+            inactivebranch = Student.objects.get(pk=b)
+            flag=0
+            if inactivebranch.status=="Active":
+                inactivebranch.status="Inactive"
+                flag=1
+            if inactivebranch.status=="Inactive" and flag==0:
+                inactivebranch.status="Active"
+            inactivebranch.save()
+            return redirect('../adminmodule/showusers')
+        else:
+            return redirect('../adminmodule/login')
+    except:
+        return redirect('../adminmodule/login')

@@ -18,4 +18,7 @@ urlpatterns = [
      path("editNotes",views.editNotes,name='editNotes'),
      path("editvideo",views.editvideo,name='editvideo'),
      path("viewcourse",views.viewcourse,name='viewcourse'),
+     path("showusers", views.showusers, name='showusers'),
+     path("activateuser", views.activateuser, name='activateuser'),
+
 ]

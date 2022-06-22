@@ -8,7 +8,7 @@ class Student(models.Model):
     smobile= models.IntegerField()
     password = models.CharField(max_length=50,default='12345')
     img = models.ImageField(upload_to="userimage/",default="userimage/userprofile.jpg")
-    status = models.CharField(max_length=10,default="active")
+    status = models.CharField(max_length=10,default="Inactive")
 
     def __str__(self):
         return self.sname

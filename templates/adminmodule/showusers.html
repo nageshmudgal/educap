@@ -1,0 +1,72 @@
+{% extends "./base.html" %}
+{% block content %}
+
+
+
+<div class="row shadow p-3 mb-3 bg-body rounded m-1 border">
+  <h2>Users</h2>
+</div>
+<br>
+
+
+
+{% if users %}
+<table class="table table-striped project-orders-table shadow p-3 mb-5 bg-body border rounded">
+  <thead>
+    <tr>
+      <th class="ml-5">Serial No.</th>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Status</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for i in users %}
+    <tr>
+      <td>{{forloop.counter}}</td>
+      <td><img style="border-radius: 30px;" alt="" width="30" height="24" class="d-inline-block align-text-top"
+          src="../media/{{i.img}}">&nbsp;{{i.sname}}</td>
+      <td>{{i.semail}}</td>
+      <td>{{i.status}}</td>
+      <td><button type="button" class="btn btn-success btn-sm btn-icon-text mr-3">
+
+              <a id="activate" href="../adminmodule/activateuser?data={{i.pk}}"
+                style="text-decoration:None; color:white;">
+                {% if i.status == "Inactive" %}
+                Activate
+                {% else %}
+                Deactivate
+                {% endif %}
+              </a>
+              <i class="typcn typcn-edit btn-icon-append"></i>
+
+            </button>
+          </span>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<nav aria-label="Page navigation example">
+  <ul class="pagination" class="mx-auto">
+    {% if users.has_previous %}
+    <li class="page-item"><a class="page-link"
+        href="{% url 'showusers' %}?page={{ users.previous_page_number }}">Previous</a></li>
+    {% endif %}
+    <li class="page-item"><a class="page-link" href="#">{{users.number}}</a></li>
+    {% if users.has_next %}
+    <li class="page-item"><a class="page-link" href="{% url 'showusers' %}?page={{ users.next_page_number }}">Next</a>
+    </li>
+    {% endif %}
+  </ul>
+</nav>
+
+{% else %}
+<h3 class="mx-auto" style="width: 400px;">
+  There is no Donation yet
+</h3>
+{% endif %}
+
+{% endblock %}
