@@ -298,20 +298,20 @@
                 <div class="modal-body">
                     <form action="../student/profileupdate" method="post" enctype="multipart/form-data">
                         <div class="mx-auto" style="width: 150px;">
-                            <img class="mb-4" src="../media/{{ user1.img }}" alt="" width="72" height="72"
+                            <img class="mb-4" src="../media/{{ studentuser.img }}" alt="" width="72" height="72"
                                 class="rounded-circle">
                             <h6>Profile picture</h6>
-                            <input type="file" name="imag" value="{{ user1.img }}">
+                            <input type="file" name="imag" value="{{ studentuser.img }}">
                             <br>
                         </div>
                         <input name="name" type="text" class="form-control" placeholder="Username"
-                            value="{{ user1.sname }}" required autofocus style="height: 50px;">
+                            value="{{ studentuser.sname }}" required autofocus style="height: 50px;">
                         <br>
                         <input name="email" type="text" class="form-control" placeholder="Email"
-                            value="{{ user1.semail }}" required autofocus style="height: 50px;">
+                            value="{{ studentuser.semail }}" required autofocus style="height: 50px;">
                         <br>
                         <input name="mobile" type="text" class="form-control" placeholder="Mobile"
-                            value="{{ user1.smobile }}" required autofocus style="height: 50px;">
+                            value="{{ studentuser.smobile }}" required autofocus style="height: 50px;">
                         <br>
                         {% csrf_token %}
                         <button class="btn btn-lg btn-primary btn-block" type="submit"
