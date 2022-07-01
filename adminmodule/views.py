@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect,HttpResponse
-from .models import Admins,Course,Notes,Assignment,Video
+from .models import Admins,Course,Notes,Assignment,Video#,usercourse
 from django.core.paginator import Paginator
 from student.models import Student
 
@@ -50,6 +50,7 @@ def course(request):
             name = request.POST['name']
             d = request.POST['desc']
             ins = Course(name=name, desc=d)
+            print(ins)
             ins.save()
 
         courses = Course.objects.filter(status="active")
@@ -215,12 +216,27 @@ def showusers(request):
         if request.session['userid'] != "":
             user = Admins.objects.get(id=request.session['userid'])
             u = Student.objects.all()
-
-            member_paginator = Paginator(u, 8)
+            c = Course.objects.all()
+            d = {}
+            l=[]
+            for i in u:
+                a = Student.objects.get(id=i.id)
+                l.append(a.course.all())
+            
+            student_paginator = Paginator(u, 8)
             page_num = request.GET.get('page')
-            page = member_paginator.get_page(page_num)
+            student_page = student_paginator.get_page(page_num)
 
-            return render(request, 'adminmodule/showusers.html', {"admin": user, "users": page})
+            course_paginator = Paginator(l,8)
+            course_page = course_paginator.get_page(page_num)
+
+            us = zip(student_page,course_page)
+
+            d["admin"]=user
+            d["users"]=us
+            d["courses"]=c
+            
+            return render(request, 'adminmodule/showusers.html', d)
         else:
 
             return redirect('../adminmodule/login')
@@ -244,3 +260,34 @@ def activateuser(request):
             return redirect('../adminmodule/login')
     except:
         return redirect('../adminmodule/login')
+
+def userCourseUpdate(request):
+    # try:
+        if request.session['userid'] !="":
+            
+            stu = Student.objects.get(id=request.GET["sid"])
+            
+            for i in Course.objects.all():
+                try:
+                    stu.course.remove(i)
+                except:
+                    pass
+            print(stu.course.all())
+            print("removed")
+
+            no = Course.objects.all().count()
+            for i in range(0,no+1):
+                try:
+                    b = request.GET[str(i)]
+                    c= Course.objects.get(id=b)
+                    stu.course.add(c)
+                except:
+                    pass
+            print(stu.course.all())
+            print("added")
+            
+            return redirect('../adminmodule/showusers')
+        else:
+            return redirect('../adminmodule/login')
+    # except:
+    #     return redirect('../adminmodule/login')

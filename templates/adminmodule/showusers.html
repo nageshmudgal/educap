@@ -1,6 +1,57 @@
 {% extends "./base.html" %}
 {% block content %}
 
+<script>
+  function filldata(names) {
+    document.getElementById("sid").value = names.pk
+    document.getElementById("cou") = names.course
+
+  }
+//   document.getElementById('submit').onclick = function() {
+//     var select = document.getElementById('cou');
+//     var selected = [...select.selectedOptions]
+//                     .map(option => option.value);
+//     alert(selected);
+//     console.log(selected)
+//     document.getElementById("cour") = selected
+// }
+</script>
+
+
+<!-- userCourse Modal -->
+<div class="modal fade" id="userCourseModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Courses Permission</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <form action="../adminmodule/userCourseUpdate" method='GET' enctype="multipart/form-data">
+                
+                
+                  <!-- {% csrf_token %} -->
+                  <input type="text" name="sid" id="sid" hidden>
+                  <div id="cou"></div>
+
+                  {% for j in courses %}
+                  <label for="vehicle1">{{j.name}}</label>
+                  <input type="checkbox" name="{{j.name}}" value="{{j.pk}}"><br>
+                  {% endfor %}
+                  
+                  
+                  
+                  <button class="btn btn-lg btn-primary btn-block" type="submit"
+                      style="width: 100%;">Update</button>
+              </form>
+          </div>
+         
+          <!--  <div class="modal-footer"></div> -->
+      </div>
+  </div>
+</div>
+
+
 
 
 <div class="row shadow p-3 mb-3 bg-body rounded m-1 border">
@@ -19,17 +70,19 @@
       <th>Email</th>
       <th>Status</th>
       <th>Action</th>
+      <th>Courses</th>
     </tr>
   </thead>
   <tbody>
-    {% for i in users %}
+    {% for i,j in users %}
     <tr>
       <td>{{forloop.counter}}</td>
       <td><img style="border-radius: 30px;" alt="" width="30" height="24" class="d-inline-block align-text-top"
           src="../media/{{i.img}}">&nbsp;{{i.sname}}</td>
       <td>{{i.semail}}</td>
       <td>{{i.status}}</td>
-      <td><button type="button" class="btn btn-success btn-sm btn-icon-text mr-3">
+      <td>
+        <button type="button" class="btn btn-success btn-sm btn-icon-text mr-3">
 
               <a id="activate" href="../adminmodule/activateuser?data={{i.pk}}"
                 style="text-decoration:None; color:white;">
@@ -42,7 +95,57 @@
               <i class="typcn typcn-edit btn-icon-append"></i>
 
             </button>
-          </span>
+          
+      </td>
+      <td>
+        <!-- <button type="button" class="btn btn-success btn-sm btn-icon-text mr-3" onclick="filldata({'pk':'{{i.pk}}','name':'{{i.sname}}','course':'{{j}}'})">
+        <a data-bs-toggle="modal" data-bs-target="#userCourseModal" style="text-decoration:None; color:white;">Courses</a>
+      </button> -->
+      <!-- <form action="../adminmodule/userCourseUpdate" method='GET' enctype="multipart/form-data">
+        <input type="text" name="sid" id="sid" value="{{i.id}}" hidden>
+        
+        <select  multiple name="cou">
+
+          {% for a in courses %}
+
+          {% if a in j %}
+          <option name="{{forloop.counter}}" value="{{a.id}}" selected>{{a.name}}</option>
+          {% else %}
+          <option name="{{forloop.counter}}" value="{{a.id}}">{{a.name}}</option>
+          {% endif %}
+
+          {% endfor %}
+        </select>
+        <button class="btn btn-lg btn-primary btn-block" type="submit" id="submit"
+          style="width: 100%;">Save</button>
+      </form> -->
+
+
+      <form action="../adminmodule/userCourseUpdate" method='GET' enctype="multipart/form-data" id="courseForm">
+
+
+        <input type="text" name="sid" id="sid" value="{{i.id}}" hidden>
+        {% for a in courses %}
+
+        <label for="vehicle1">{{a.name}}</label>
+        {% if a in j %}
+        <input type="checkbox" name="{{forloop.counter}}"  value="{{a.pk}}" checked><br>
+        {% else %}
+        <input type="checkbox" name="{{forloop.counter}}"  value="{{a.pk}}"><br>
+        {% endif %}
+
+        {% endfor %}
+        <!-- onchange="document.getElementById('courseForm').submit();" -->
+        <button class="btn btn-lg btn-primary btn-block" type="submit" style="width: 100%;">Save</button>
+      </form>
+
+      
+      
+      <!-- {% for k in j %}
+      <button type="button" class="btn btn-success btn-sm btn-icon-text mr-3">
+        {{k}}
+      </button>
+      {% endfor %} -->
       </td>
     </tr>
     {% endfor %}

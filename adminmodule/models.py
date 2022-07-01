@@ -1,4 +1,5 @@
 from django.db import models
+# from student.models import Student
 
 class Admins(models.Model):
 
@@ -37,3 +38,9 @@ class Video(models.Model):
     name = models.CharField(max_length=50,default="abc")
     file = models.FileField(upload_to="videos/", default='')
     status = models.CharField(max_length=10, default="active")
+
+# class usercourse(models.Model):
+#     uid = models.ForeignKey(Student,on_delete=models.CASCADE, related_name="uid")
+#     cid = models.ForeignKey(Course,on_delete=models.CASCADE, related_name="cid")
+    # def __str__(self):
+    #     return self.uid.sname,self.cid.name

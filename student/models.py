@@ -1,4 +1,5 @@
 from django.db import models
+from adminmodule.models import Course
 
 # Create your models here.
 class Student(models.Model):
@@ -9,6 +10,8 @@ class Student(models.Model):
     password = models.CharField(max_length=50,default='12345')
     img = models.ImageField(upload_to="userimage/",default="userimage/userprofile.jpg")
     status = models.CharField(max_length=10,default="Inactive")
+    # courses = models.CharField(max_length=1000,null=True)
+    course = models.ManyToManyField(Course)
 
     def __str__(self):
         return self.sname
