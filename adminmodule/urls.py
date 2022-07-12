@@ -25,6 +25,12 @@ urlpatterns = [
      path("showusers", views.showusers, name='showusers'),
      path("activateuser", views.activateuser, name='activateuser'),
      path("userCourseUpdate", views.userCourseUpdate, name='userCourseUpdate'),
+
+     path("batch",views.Batches,name='batches'),
+     path("batchcontent",views.batchcontent,name='batchcontent'),
+     path("batchvideo",views.batchvideo,name="batchvideo"),
+     path("viewbatch",views.viewbatch,name="viewbatch"),
+     path("editbatch",views.editbatch,name="editbatch"),
      
 
 

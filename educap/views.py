@@ -5,7 +5,7 @@ from student.models import Student
 from adminmodule.models import Course,Assignment,Notes,Video
 
 def home(request):
-    courses = Course.objects.all()
+    courses = Course.objects.filter(status='active')
     params = {'courses':courses}
 
 
@@ -18,6 +18,16 @@ def home(request):
     except:
         return render(request, "home.html",params)
 
+def syllabus(request):
+    data = request.GET['data']
+    print(data)
+    c = Course.objects.get(pk=data)
+    print(c)
+    n = Notes.objects.filter(cid=c,status="active")
+    print(n)
+    params={'notes':n,'courses':c}
+    return render(request,'syllabus.html',params)
+  
 def studentRegistration(request):
     if request.method=='POST':
         email = request.POST.get('email')

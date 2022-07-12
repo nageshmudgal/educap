@@ -1,0 +1,42 @@
+{% extends "./base.html" %}
+{% block content %}
+<div class="row shadow p-3 mb-3 bg-body rounded m-1 border">
+<h2>Batches</h2>
+</div>
+<!-- add Video Modal -->
+<div class="modal fade" id="addVideoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Add video</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="../adminmodule/batchvideo" method="post" enctype="multipart/form-data">
+            <input type="text" hidden name="bid" value="{{b.id}}"> 
+            <p>Name:</p>
+            <input type="text" name="names" required><br>
+            <p>File:</p>
+            <input type="file" name="video" required><br>
+  
+  
+            {% csrf_token %}
+            <div class="modal-footer">
+              <input type="submit" class="btn btn-primary" value="Add"><br>
+            </div>
+  
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<!-- Button trigger modal Videos -->
+
+<button style="align-items: left;" type="button" class="btn btn-primary" data-bs-toggle="modal"
+data-bs-target="#addVideoModal">
+Add video
+</button>
+</div>
+{% endblock content %}

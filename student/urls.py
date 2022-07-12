@@ -10,5 +10,7 @@ urlpatterns = [
      path('signup/',views.signup,name='signup'),
      path('', views.homes ,name='homes'),
      path('profileupdate',views.profileupdate,name='profileupdate'),
+     path('otp',views.otp,name='otp'),
      path('changepass',views.changepass,name='changepass'),
+    
 ]

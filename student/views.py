@@ -1,7 +1,10 @@
 from django.shortcuts import render, redirect
-from .models import Student
+from .models import Student,User_Otp
+from adminmodule.models import Course,Notes
 from django.contrib import messages
-
+import random
+from django.core.mail import send_mail
+from django.conf import settings
 
 # Create your views here.
 def homes(request):
@@ -13,7 +16,30 @@ def homes(request):
     except:
         return redirect('../')
 
+
 def signup(request):
+   
+    if request.method == 'GET':
+        get_otp = request.GET['gotp']
+        if get_otp:
+            get_userid=request.GET['userid']
+            user=Student.objects.get(id=get_userid)
+            if int(get_otp) == User_Otp.objects.filter(user=user).last().otp :
+                messages.success(request, "Account has been created")
+                mess= f'Hello, {user.sname} \n your account has been successfully created \n Please wait for admin to active it. \n Thanks.'
+                send_mail(
+                "Welcome to Educap ",
+                mess, 
+                settings.EMAIL_HOST_USER,
+                [user.semail],
+                fail_silently = False
+
+                )
+                
+                return redirect('../')
+            else:
+                messages.error(request, "You have entered wrong OTP")
+                return render(request,'../student/otp.html',{'otp':True,'user':user})
     if request.method == 'POST':
         sname = request.POST['sname']
         semail = request.POST['semail']
@@ -23,10 +49,23 @@ def signup(request):
         allemails = Student.objects.values_list("semail",flat=True)
         if semail in allemails:
             messages.warning(request, "Email is already registered")
-            return redirect('../')
+            
 
         user = Student(sname=sname, semail=semail, smobile=smobile, password=password)
         user.save()
+        user_opt=random.randint(100000,999999)
+
+        User_Otp.objects.create(user=user,otp= user_opt)
+        mess= f'Hello, {sname} \n your otp is {user_opt} \n Thanks.'
+        send_mail(
+            "Welcome to Educap - verify your email",
+            mess, 
+            settings.EMAIL_HOST_USER,
+            [semail],
+            fail_silently = False
+
+        )
+        return render(request,'otp.html',{'otp':True,'user':user})
         return redirect('../')
     return redirect('../')
 
@@ -54,7 +93,8 @@ def logout(request):
     except:
         return redirect("../")
 
-
+def otp(request):
+    return render(request,"otp.html")
 
 
 
