@@ -47,6 +47,7 @@
       </div>
     </div>
   </div>
+
   <!-- add Batches Modal -->
   <div class="modal fade"
        id="addBatchesModal"
@@ -161,6 +162,7 @@
       </div>
     </div>
   </div>
+
   <!-- update course Modal -->
   <div class="modal fade"
        id="editCourseModal"
@@ -201,11 +203,15 @@
       </div>
     </div>
   </div>
+
   <div class="row shadow p-3 mb-3 bg-body rounded m-1 border">
     <h2>Courses</h2>
   </div>
+
   <!-- Button trigger modal -->
-  <div style="margin-left: 89%;">
+  <div class="row">
+    <div class="col-8"></div>
+  <div class="col-2" >
     <button style="align-items: left;"
             type="button"
             class="btn btn-primary"
@@ -214,8 +220,7 @@
       Add Course
     </button>
   </div>
-  <br>
-  <div style="margin-left: 89%;">
+  <div class="col-2">
     <button style="align-items: left;"
             type="button"
             class="btn btn-primary"
@@ -224,6 +229,7 @@
       Add Batches
     </button>
   </div>
+</div>
   <br>
   {% if courses %}
     <table class="table table-striped project-orders-table shadow p-3 mb-3 bg-body border rounded">

@@ -406,7 +406,7 @@ def activateuser(request):
         return redirect('../adminmodule/login')
 
 def userCourseUpdate(request):
-    # try:
+    try:
         if request.session['userid'] !="":
             
             stu = Student.objects.get(id=request.GET["sid"])
@@ -416,23 +416,18 @@ def userCourseUpdate(request):
                     stu.course.remove(i)
                 except:
                     pass
-            print(stu.course.all())
-            print("removed")
+            # removed all Courses from student
 
-            no = Course.objects.all().count()
-            for i in range(0,no+1):
-                try:
-                    b = request.GET[str(i)]
-                    c= Course.objects.get(id=b)
-                    stu.course.add(c)
-                except:
-                    pass
-            print(stu.course.all())
-            print("added")
-            
+
+            l = request.GET.getlist('selectedCourse')
+            for i in l:
+                c= Course.objects.get(id=i)
+                stu.course.add(c)
+            # all selected Courses
+
             return redirect('../adminmodule/showusers')
         else:
             return redirect('../adminmodule/login')
-    # except:
-    #     return redirect('../adminmodule/login')
+    except:
+        return redirect('../adminmodule/login')
 
