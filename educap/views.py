@@ -9,7 +9,6 @@ def home(request):
     params = {'courses':courses}
 
 
-    # params ={}
     try:
         user = Student.objects.get(id=request.session['studentuser'])
 
@@ -25,7 +24,7 @@ def syllabus(request):
     print(c)
     n = Notes.objects.filter(cid=c,status="active")
     print(n)
-    params={'notes':n,'courses':c}
+    params={'notes':n,'courses':c,"studentuser":Student.objects.get(id=request.session['studentuser'])}
     return render(request,'syllabus.html',params)
   
 def studentRegistration(request):

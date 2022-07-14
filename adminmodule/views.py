@@ -303,7 +303,7 @@ def showusers(request):
             elif f:
                 
                 if len(f)>20:
-                    allStudent = Student.objects.none()
+                    u = Student.objects.none()
                 else:
                     allStudentName= Student.objects.filter(sname__icontains=f)
                     allStudentEmail= Student.objects.filter(semail__icontains=f)

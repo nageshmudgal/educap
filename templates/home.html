@@ -9,11 +9,24 @@
         <div class="row mb-2 my-6">
             {% for i in courses %}
             <div class="card rounded m-1 mx-auto border" style="width: 15rem;">
-                <a href="../viewcourse?data={{i.pk}}">
+                
                 <img src="media/{{i.img}}" class="card-img-top" alt="...">
-                </a>
+                <a href="../viewcourse?data={{i.pk}}"></a>
                 <div class="card-body">
-                <a href="../syllabus?data={{i.pk}}" style="none";><p class="card-text">{{i.desc}}</p></a>
+                    <button type="button" class="btn btn-success btn-sm btn-icon-text">
+                        <a name="delete"
+                           href="../syllabus?data={{i.pk}}"
+                           style="text-decoration:None;
+                                  color:white;">Syllabus</a>
+                        <i class="typcn typcn-delete-outline btn-icon-append"></i>
+                      </button>
+                      <button type="button" class="btn btn-success btn-sm btn-icon-text">
+                        <a name="delete"
+                           href="../viewcourse?data={{i.pk}}"
+                           style="text-decoration:None;
+                                  color:white;">View Course</a>
+                        <i class="typcn typcn-delete-outline btn-icon-append"></i>
+                      </button>
                 </div>
                 
             </div>
