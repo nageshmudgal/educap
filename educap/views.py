@@ -19,13 +19,19 @@ def home(request):
 
 def syllabus(request):
     data = request.GET['data']
-    print(data)
+
     c = Course.objects.get(pk=data)
-    print(c)
+
     n = Notes.objects.filter(cid=c,status="active")
-    print(n)
-    params={'notes':n,'courses':c,"studentuser":Student.objects.get(id=request.session['studentuser'])}
-    return render(request,'syllabus.html',params)
+
+    try: 
+        studentuser = Student.objects.get(id=request.session['studentuser'])
+        params={'notes':n,'course':c,"studentuser":studentuser}
+        return render(request,'syllabus.html',params)
+    except:
+        params={'notes':n,'course':c}
+        return render(request,'syllabus.html',params)
+    
   
 def studentRegistration(request):
     if request.method=='POST':
