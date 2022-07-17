@@ -1,5 +1,6 @@
 from django.db import models
 from adminmodule.models import Course
+from datetime import date
 
 # Create your models here.
 class Student(models.Model):
@@ -10,8 +11,8 @@ class Student(models.Model):
     password = models.CharField(max_length=50,default='12345')
     img = models.ImageField(upload_to="userimage/",default="userimage/userprofile.jpg")
     status = models.CharField(max_length=10,default="Inactive")
-    
     course = models.ManyToManyField(Course,blank=True)
+    date = models.DateField(default=date.today)
 
     def __str__(self):
         return self.sname

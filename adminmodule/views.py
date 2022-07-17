@@ -1,11 +1,11 @@
 from django.shortcuts import render,redirect,HttpResponse
-from .models import Admins,Course,Notes,Assignment,Video,Batch,Batch_videos#,usercourse
+from .models import Admins,Course,Notes,Assignment,Video,Batch,Batch_videos
 from django.core.paginator import Paginator
 from django.contrib import messages
 from student.models import Student
-from student.models import Student
 from django.core.mail import send_mail
 from django.conf import settings
+from django.db.models import Q
 
 
 def home(request):
@@ -16,8 +16,9 @@ def home(request):
             n = Notes.objects.filter(status="active")
             a = Assignment.objects.filter(status="active")
             v = Video.objects.filter(status="active")
+            s = Student.objects.filter(Q(status="Active") | Q(status="Inactive"))
 
-            params = {'courses': c,"notes":n,"assignments":a,"videos":v,"admin": admin}
+            params = {'courses': c,"notes":n,"assignments":a,"videos":v,"admin": admin,"students":s}
             return render(request, "adminmodule/home.html", params)
         else:
             return redirect('../adminmodule/login')
@@ -59,7 +60,21 @@ def course(request):
             print(ins)
             ins.save()
 
-        courses = Course.objects.filter(status="active")
+        f = request.GET.get('f')
+        if f=='1':
+            courses = Course.objects.filter(status="active").order_by('name')
+        elif f:
+            if len(f)>20:
+                courses = Course.objects.none()
+            else:
+                courses= Course.objects.filter(name__icontains=f)
+                
+            if courses.count()==0:
+                messages.warning(request, "No search results found. Please refine your query.")    
+                return redirect('course')
+        else:
+            courses = Course.objects.filter(status="active")
+
         batches = Batch.objects.filter(status="active")
         print(batches)
         enteries = 7
@@ -300,6 +315,8 @@ def showusers(request):
                 u = Student.objects.all().order_by('sname')
             elif f=='2':
                 u = Student.objects.all().order_by('semail')
+            elif f=='3':
+                u = Student.objects.all().order_by('-date')
             elif f:
                 
                 if len(f)>20:
@@ -312,6 +329,15 @@ def showusers(request):
                     messages.warning(request, "No search results found. Please refine your query.")
                     
                     return redirect('showusers')
+            elif request.GET.getlist('selectedCourseFilter'):
+                u = Student.objects.all()
+                for i in request.GET.getlist('selectedCourseFilter'):
+                    co = Course.objects.get(id=i)
+                    print("for",co)
+                    temp = Student.objects.filter(course=co)
+                    u = u & temp
+                    print(u)
+
             else:
                 u = Student.objects.all()
             
@@ -323,7 +349,6 @@ def showusers(request):
             
 
             en = request.GET.get('entry')
-            
             if en:
                 request.session['entry']= int(en)
             
@@ -334,10 +359,12 @@ def showusers(request):
             course_paginator = Paginator(l,request.session['entry'])
             course_page = course_paginator.get_page(page_num)
 
+            print(l)
             us = zip(student_page,course_page)
 
             d["admin"]=user
             d["users"]=us
+            print(us)
             d['user']=student_page
             d["courses"]=c
             d["enteries"]=request.session['entry']

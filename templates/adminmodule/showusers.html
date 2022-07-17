@@ -18,40 +18,6 @@
 </script>
 
 
-<!-- userCourse Modal -->
-<div class="modal fade" id="userCourseModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-      <div class="modal-content">
-          <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Courses Permission</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-              <form action="../adminmodule/userCourseUpdate" method='GET' enctype="multipart/form-data">
-                
-                
-                  <!-- {% csrf_token %} -->
-                  <input type="text" name="sid" id="sid" hidden>
-                  <div id="cou"></div>
-
-                  {% for j in courses %}
-                  <label for="vehicle1">{{j.name}}</label>
-                  <input type="checkbox" name="{{j.name}}" value="{{j.pk}}"><br>
-                  {% endfor %}
-                  
-                  
-                  
-                  <button class="btn btn-lg btn-primary btn-block" type="submit"
-                      style="width: 100%;">Update</button>
-              </form>
-          </div>
-         
-          <!--  <div class="modal-footer"></div> -->
-      </div>
-  </div>
-</div>
-
-
 
 
 
@@ -60,121 +26,153 @@
 </div>
 <div class="row">
   <div class="col-3">
-<form class="d-flex" action="../adminmodule/showusers" method="get">
-  
-  Showing {{enteries}} of {{user|length}}
-  <select name="entry" onchange="this.form.submit()">
-    <option>
-      -
-    </option>
-    <option value="5">
-      5
-    </option>
-    <option value="10">
-      10
-    </option>
-    <option value="15">
-      15
-    </option>
-  </select>
+    <form class="d-flex" action="../adminmodule/showusers" method="get">
 
-</form>
-</div>
+      Showing {{enteries}} of {{user|length}}
+      <select name="entry" onchange="this.form.submit()">
+        <option>
+          -
+        </option>
+        <option value="5">
+          5
+        </option>
+        <option value="10">
+          10
+        </option>
+        <option value="15">
+          15
+        </option>
+      </select>
 
-<div class="col-3">
-  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-              data-bs-toggle="dropdown" aria-expanded="false">
-              Courses
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li>
-  <form class="d-flex" action="../adminmodule/showusers" method="get" name="entryForm">
-    {% for a in courses %}
+    </form>
+  </div>
+
+  <div class="col-3">
+    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+      aria-expanded="false">
+      Courses
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+      <li>
+        <form class="d-flex" action="../adminmodule/showusers" method="get" name="entryForm">
+
+          {% for a in courses %}
           
-    <label for="vehicle1">{{a.name}}</label>
-    <input type="checkbox" name="{{forloop.counter}}" onchange="this.form.submit()" value="{{a.pk}}"><br>
+          <label for="vehicle1">{{a.name}}</label>
+          <input type="checkbox" name="selectedCourseFilter" value="{{a.pk}}"><br>
+          
+          {% endfor %}
+          <button class="btn btn-lg btn-primary btn-block" type="submit" style="width: 100%;">Filter</button>
+        </form>
+      
+      </li>
+    </ul>
+  </div>
 
-    {% endfor %}
+  <div class="col-6">
+    <form class="d-flex" action="../adminmodule/course" method="get">
 
-  </form>
-</li>
-              
-</ul>
-</div>
+      <input class="form-control me-2 rounded-pill" type="search" name="f" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-success rounded-4" type="submit">
+        Search
+      </button>
 
-<div class="col-6">
-<form class="d-flex" action="../adminmodule/showusers" method="get">
-  
-  <input class="form-control me-2 rounded-pill" type="search" name="f" placeholder="Search"
-      aria-label="Search">
-  <button class="btn btn-outline-success rounded-4" type="submit">
-      Search
-  </button>
-
-</form>
-</div>
+    </form>
+  </div>
 </div>
 <br>
 
 
 <div class="overflow-auto" style="height: 520px;">
-{% if users %}
-<table class="table table-striped project-orders-table shadow p-3 mb-5 bg-body border rounded">
-  <thead>
-    <tr>
-      <th class="ml-5">Serial No.</th>
-      <th><a href="../adminmodule/showusers?f=1" style="text-decoration: None; color: black;">Name</a></th>
-      <th><a href="../adminmodule/showusers?f=2" style="text-decoration: None; color: black;">Email</a></th>
-      
-      <th>Status</th>
-      <th>Action</th>
-      <th>Enrolled Courses</th>
-      <th>Courses</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for i,j in users %}
-    <tr>
-      <td>{{forloop.counter}}</td>
-      <td><img style="border-radius: 30px;" alt="" width="30" height="24" class="d-inline-block align-text-top"
-          src="../media/{{i.img}}">&nbsp;{{i.sname}}</td>
-      <td>{{i.semail}}</td>
-      <td>{{i.status}}</td>
-      <td>
-                {% if i.status == "Inactive" %}
-                <button type="button" class="btn btn-success btn-sm btn-icon-text mr-3">
-                <a id="activate" href="../adminmodule/activateuser?data={{i.pk}}"
-                style="text-decoration:None; color:white;">
-                Activate
-                </a>
-                <i class="typcn typcn-edit btn-icon-append"></i>
-            </button>
-                {% else %}
-                <button type="button" class="btn btn-danger btn-sm btn-icon-text mr-3">
-                <a id="activate" href="../adminmodule/activateuser?data={{i.pk}}"
-                style="text-decoration:None; color:white;">
-                Deactivate
-                </a>
-                <i class="typcn typcn-edit btn-icon-append"></i>
-            </button>
-                {% endif %}
-      </td>
-      <td>
-        {% for k in j %}
-        {{k}},
-        {% endfor %}
-      </td>
-      <td>
-        
-        <!-- courses checkbox in dropdown -->
+  {% if users %}
+  <table class="table table-striped project-orders-table shadow p-3 mb-5 bg-body border rounded">
+    <thead>
+      <tr>
+        <th class="ml-5">Serial No.</th>
+        <th>
+          <a href="../adminmodule/showusers?f=1" style="text-decoration: None; color: black;">Name
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+              class="bi bi-sort-alpha-down" viewBox="0 0 16 16">
+              <path fill-rule="evenodd"
+                d="M10.082 5.629 9.664 7H8.598l1.789-5.332h1.234L13.402 7h-1.12l-.419-1.371h-1.781zm1.57-.785L11 2.687h-.047l-.652 2.157h1.351z" />
+              <path
+                d="M12.96 14H9.028v-.691l2.579-3.72v-.054H9.098v-.867h3.785v.691l-2.567 3.72v.054h2.645V14zM4.5 2.5a.5.5 0 0 0-1 0v9.793l-1.146-1.147a.5.5 0 0 0-.708.708l2 1.999.007.007a.497.497 0 0 0 .7-.006l2-2a.5.5 0 0 0-.707-.708L4.5 12.293V2.5z" />
+            </svg>
+          </a>
+        </th>
+        <th>
+          <a href="../adminmodule/showusers?f=2" style="text-decoration: None; color: black;">Email
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+              class="bi bi-sort-alpha-down" viewBox="0 0 16 16">
+              <path fill-rule="evenodd"
+                d="M10.082 5.629 9.664 7H8.598l1.789-5.332h1.234L13.402 7h-1.12l-.419-1.371h-1.781zm1.57-.785L11 2.687h-.047l-.652 2.157h1.351z" />
+              <path
+                d="M12.96 14H9.028v-.691l2.579-3.72v-.054H9.098v-.867h3.785v.691l-2.567 3.72v.054h2.645V14zM4.5 2.5a.5.5 0 0 0-1 0v9.793l-1.146-1.147a.5.5 0 0 0-.708.708l2 1.999.007.007a.497.497 0 0 0 .7-.006l2-2a.5.5 0 0 0-.707-.708L4.5 12.293V2.5z" />
+            </svg>
+          </a>
+        </th>
 
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-              data-bs-toggle="dropdown" aria-expanded="false">
-              Courses
+        <th>Status</th>
+        <th>
+          <a href="../adminmodule/showusers?f=3" style="text-decoration: None; color: black;">Date
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+              class="bi bi-sort-alpha-down" viewBox="0 0 16 16">
+              <path fill-rule="evenodd"
+                d="M10.082 5.629 9.664 7H8.598l1.789-5.332h1.234L13.402 7h-1.12l-.419-1.371h-1.781zm1.57-.785L11 2.687h-.047l-.652 2.157h1.351z" />
+              <path
+                d="M12.96 14H9.028v-.691l2.579-3.72v-.054H9.098v-.867h3.785v.691l-2.567 3.72v.054h2.645V14zM4.5 2.5a.5.5 0 0 0-1 0v9.793l-1.146-1.147a.5.5 0 0 0-.708.708l2 1.999.007.007a.497.497 0 0 0 .7-.006l2-2a.5.5 0 0 0-.707-.708L4.5 12.293V2.5z" />
+            </svg>
+          </a>
+        </th>
+        <th>Action</th>
+        <th>Enrolled Courses</th>
+        <th>Courses</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for i,j in users %}
+      <tr>
+        <td>{{forloop.counter}}</td>
+        <td><img style="border-radius: 30px;" alt="" width="30" height="24" class="d-inline-block align-text-top"
+            src="../media/{{i.img}}">&nbsp;{{i.sname}}</td>
+        <td>{{i.semail}}</td>
+        <td>{{i.status}}</td>
+        <td>{{i.date}}</td>
+        <td>
+          {% if i.status == "Inactive" %}
+          <button type="button" class="btn btn-success btn-sm btn-icon-text mr-3">
+            <a id="activate" href="../adminmodule/activateuser?data={{i.pk}}"
+              style="text-decoration:None; color:white;">
+              Activate
+            </a>
+            <i class="typcn typcn-edit btn-icon-append"></i>
+          </button>
+          {% else %}
+          <button type="button" class="btn btn-danger btn-sm btn-icon-text mr-3">
+            <a id="activate" href="../adminmodule/activateuser?data={{i.pk}}"
+              style="text-decoration:None; color:white;">
+              Deactivate
+            </a>
+            <i class="typcn typcn-edit btn-icon-append"></i>
+          </button>
+          {% endif %}
+        </td>
+        <td>
+          {% for k in j %}
+          {{k}},
+          {% endfor %}
+        </td>
+        <td>
+
+          <!-- courses checkbox in dropdown -->
+
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            Courses
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li>
-                <!-- <form action="../adminmodule/userCourseUpdate" method='GET' enctype="multipart/form-data" id="courseForm">
+            <li>
+              <!-- <form action="../adminmodule/userCourseUpdate" method='GET' enctype="multipart/form-data" id="courseForm">
 
 
                   <input type="text" name="sid" id="sid" value="{{i.id}}" hidden>
@@ -189,51 +187,52 @@
           
                   {% endfor %}
                   </form> -->
-                  <form action="../adminmodule/userCourseUpdate" method='GET' enctype="multipart/form-data" id="courseForm">
+              <form action="../adminmodule/userCourseUpdate" method='GET' enctype="multipart/form-data" id="courseForm">
 
 
-                    <input type="text" name="sid" id="sid" value="{{i.id}}" hidden>
-                    {% for a in courses %}
-            
-                    <label>{{a.name}}</label>
-                    {% if a in j %}
-                    <input type="checkbox" name="selectedCourse"  value="{{a.pk}}" checked onchange="this.form.submit()"><br>
-                    {% else %}
-                    <input type="checkbox" name="selectedCourse"  value="{{a.pk}}" onchange="this.form.submit()"><br>
-                    {% endif %}
-            
-                    {% endfor %}
-                    </form>
-              </li>
-              
+                <input type="text" name="sid" id="sid" value="{{i.id}}" hidden>
+                {% for a in courses %}
+
+                <label>{{a.name}}</label>
+                {% if a in j %}
+                <input type="checkbox" name="selectedCourse" value="{{a.pk}}" checked onchange="this.form.submit()"><br>
+                {% else %}
+                <input type="checkbox" name="selectedCourse" value="{{a.pk}}" onchange="this.form.submit()"><br>
+                {% endif %}
+
+                {% endfor %}
+              </form>
+            </li>
+
           </ul>
-      
 
-      
-      </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
 
-<nav aria-label="Page navigation example">
-  <ul class="pagination" class="mx-auto">
-    {% if user.has_previous %}
-    <li class="page-item"><a class="page-link" href="{% url 'showusers' %}?page={{ user.previous_page_number }}">Previous</a></li>
-    {% endif %}
-    <li class="page-item"><a class="page-link" href="#">{{user.number}}</a></li>
-    {% if user.has_next %}
-    <li class="page-item"><a class="page-link" href="{% url 'showusers' %}?page={{ user.next_page_number }}">Next</a>
-    </li>
-    {% endif %}
-  </ul>
-</nav>
 
-{% else %}
-<h3 class="mx-auto" style="width: 400px;">
-  There is no User yet
-</h3>
-{% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <nav aria-label="Page navigation example">
+    <ul class="pagination" class="mx-auto">
+      {% if user.has_previous %}
+      <li class="page-item"><a class="page-link"
+          href="{% url 'showusers' %}?page={{ user.previous_page_number }}">Previous</a></li>
+      {% endif %}
+      <li class="page-item"><a class="page-link" href="#">{{user.number}}</a></li>
+      {% if user.has_next %}
+      <li class="page-item"><a class="page-link" href="{% url 'showusers' %}?page={{ user.next_page_number }}">Next</a>
+      </li>
+      {% endif %}
+    </ul>
+  </nav>
+
+  {% else %}
+  <h3 class="mx-auto" style="width: 400px;">
+    There is no User yet
+  </h3>
+  {% endif %}
 </div>
 
 {% endblock %}
