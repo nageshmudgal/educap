@@ -76,9 +76,13 @@ def course(request):
             courses = Course.objects.filter(status="active")
 
         batches = Batch.objects.filter(status="active")
-        print(batches)
-        enteries = 7
-        member_paginator = Paginator(courses, enteries)
+
+        
+        en = request.GET.get('entry')
+        if en:
+            request.session['entry']= int(en)
+        
+        member_paginator = Paginator(courses, request.session['entry'])
 
         page_num = request.GET.get('page')
 
@@ -300,6 +304,10 @@ def deleteinstance(request):
         b = request.GET['data']
         Batch.objects.filter(pk=b).update(status="deleted")
         return redirect('viewbatch')
+    if request.GET['op']=='6':
+        b = request.GET['data']
+        Student.objects.filter(pk=b).update(status="deleted")
+        return redirect('showusers')
     return HttpResponse("Error")
 
 
@@ -312,34 +320,42 @@ def showusers(request):
             
             f = request.GET.get('f')
             if f=='1':
-                u = Student.objects.all().order_by('sname')
+                u = Student.objects.filter(~Q(status="deleted")).order_by('sname')          # sort by name
             elif f=='2':
-                u = Student.objects.all().order_by('semail')
+                u = Student.objects.filter(~Q(status="deleted")).order_by('semail')         # sort by email
             elif f=='3':
-                u = Student.objects.all().order_by('-date')
-            elif f:
-                
+                u = Student.objects.filter(~Q(status="deleted")).order_by('-date')          # sort by date
+
+            elif f:                                                                         # search
                 if len(f)>20:
                     u = Student.objects.none()
                 else:
-                    allStudentName= Student.objects.filter(sname__icontains=f)
-                    allStudentEmail= Student.objects.filter(semail__icontains=f)
+                    allStudentName= Student.objects.filter(sname__icontains=f).filter(~Q(status="deleted"))
+                    allStudentEmail= Student.objects.filter(semail__icontains=f).filter(~Q(status="deleted"))
                     u = allStudentName.union(allStudentEmail)
                 if u.count()==0:
                     messages.warning(request, "No search results found. Please refine your query.")
                     
                     return redirect('showusers')
-            elif request.GET.getlist('selectedCourseFilter'):
-                u = Student.objects.all()
-                for i in request.GET.getlist('selectedCourseFilter'):
+
+            elif request.GET.getlist('selectedCourseFilter'):                               # filter
+
+                filterlist = request.GET.getlist('selectedCourseFilter')
+
+                if "Deleted" in filterlist:
+                    u = Student.objects.filter(status="deleted")
+                    filterlist.remove("Deleted")
+                else:
+                    u = Student.objects.all()
+                
+                for i in filterlist:
                     co = Course.objects.get(id=i)
-                    print("for",co)
                     temp = Student.objects.filter(course=co)
                     u = u & temp
                     print(u)
 
             else:
-                u = Student.objects.all()
+                u = Student.objects.filter(~Q(status="deleted"))
             
             d = {}
             l=[]
@@ -377,7 +393,7 @@ def showusers(request):
         return redirect('../adminmodule/login')
 
 def activateuser(request):
-    try:
+    #try:
         if request.session['userid'] !="":
             b = request.GET['data']
             ins = Student.objects.get(pk=b)
@@ -413,24 +429,24 @@ def activateuser(request):
             return redirect('../adminmodule/showusers')
         else:
             return redirect('../adminmodule/login')
-    except:
-        return redirect('../adminmodule/login')
-    try:
-        if request.session['userid'] !="":
-            b = request.GET['data']
-            inactivebranch = Student.objects.get(pk=b)
-            flag=0
-            if inactivebranch.status=="Active":
-                inactivebranch.status="Inactive"
-                flag=1
-            if inactivebranch.status=="Inactive" and flag==0:
-                inactivebranch.status="Active"
-            inactivebranch.save()
-            return redirect('../adminmodule/showusers')
-        else:
-            return redirect('../adminmodule/login')
-    except:
-        return redirect('../adminmodule/login')
+    #except:
+    #    return redirect('../adminmodule/login')
+    # try:
+    #     if request.session['userid'] !="":
+    #         b = request.GET['data']
+    #         inactivebranch = Student.objects.get(pk=b)
+    #         flag=0
+    #         if inactivebranch.status=="Active":
+    #             inactivebranch.status="Inactive"
+    #             flag=1
+    #         if inactivebranch.status=="Inactive" and flag==0:
+    #             inactivebranch.status="Active"
+    #         inactivebranch.save()
+    #         return redirect('../adminmodule/showusers')
+    #     else:
+    #         return redirect('../adminmodule/login')
+    # except:
+    #     return redirect('../adminmodule/login')
 
 def userCourseUpdate(request):
     try:

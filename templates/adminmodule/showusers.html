@@ -50,7 +50,7 @@
   <div class="col-3">
     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
       aria-expanded="false">
-      Courses
+      Filter
     </a>
     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
       <li>
@@ -62,6 +62,9 @@
           <input type="checkbox" name="selectedCourseFilter" value="{{a.pk}}"><br>
           
           {% endfor %}
+
+          <label for="vehicle1">Deleted</label>
+          <input type="checkbox" name="selectedCourseFilter" value="Deleted"><br>
           <button class="btn btn-lg btn-primary btn-block" type="submit" style="width: 100%;">Filter</button>
         </form>
       
@@ -125,6 +128,7 @@
           </a>
         </th>
         <th>Action</th>
+        <th></th>
         <th>Enrolled Courses</th>
         <th>Courses</th>
       </tr>
@@ -158,8 +162,15 @@
           {% endif %}
         </td>
         <td>
+          <button type="button" class="btn btn-danger btn-sm btn-icon-text">
+            <a name="delete" href="../adminmodule/deleteinstance?data={{ i.pk }}&op=6" style="text-decoration:None;
+                            color:white;"><i class="typcn typcn-delete-outline btn-icon-append">Delete</i></a>
+            
+          </button>
+        </td>
+        <td>
           {% for k in j %}
-          {{k}},
+          {{k}}
           {% endfor %}
         </td>
         <td>
