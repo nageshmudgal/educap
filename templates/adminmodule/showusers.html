@@ -5,7 +5,6 @@
   function filldata(names) {
     document.getElementById("sid").value = names.pk
     document.getElementById("cou") = names.course
-
   }
 //   document.getElementById('submit').onclick = function() {
 //     var select = document.getElementById('cou');
@@ -73,7 +72,7 @@
   </div>
 
   <div class="col-6">
-    <form class="d-flex" action="../adminmodule/course" method="get">
+    <form class="d-flex" action="../adminmodule/showusers" method="get">
 
       <input class="form-control me-2 rounded-pill" type="search" name="f" placeholder="Search" aria-label="Search">
       <button class="btn btn-outline-success rounded-4" type="submit">
@@ -88,7 +87,7 @@
 
 <div class="overflow-auto" style="height: 520px;">
   {% if users %}
-  <table class="table table-striped project-orders-table shadow p-3 mb-5 bg-body border rounded">
+  <table class="table table-striped project-orders-table shadow p-3 mb-5 bg-body border rounded" style="font-size: 12px;">
     <thead>
       <tr>
         <th class="ml-5">Serial No.</th>
@@ -131,10 +130,11 @@
         <th></th>
         <th>Enrolled Courses</th>
         <th>Courses</th>
+        <th>Batches</th>
       </tr>
     </thead>
     <tbody>
-      {% for i,j in users %}
+      {% for i,j,ba in users %}
       <tr>
         <td>{{forloop.counter}}</td>
         <td><img style="border-radius: 30px;" alt="" width="30" height="24" class="d-inline-block align-text-top"
@@ -183,21 +183,6 @@
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             <li>
-              <!-- <form action="../adminmodule/userCourseUpdate" method='GET' enctype="multipart/form-data" id="courseForm">
-
-
-                  <input type="text" name="sid" id="sid" value="{{i.id}}" hidden>
-                  {% for a in courses %}
-          
-                  <label for="vehicle1">{{a.name}}</label>
-                  {% if a in j %}
-                  <input type="checkbox" name="{{forloop.counter}}"  value="{{a.pk}}" checked onchange="this.form.submit()"><br>
-                  {% else %}
-                  <input type="checkbox" name="{{forloop.counter}}"  value="{{a.pk}}" onchange="this.form.submit()"><br>
-                  {% endif %}
-          
-                  {% endfor %}
-                  </form> -->
               <form action="../adminmodule/userCourseUpdate" method='GET' enctype="multipart/form-data" id="courseForm">
 
 
@@ -214,11 +199,41 @@
                 {% endfor %}
               </form>
             </li>
-
           </ul>
+        </td>
+        <td>
+
+          <!-- batch checkbox in dropdown -->
+
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            Batches
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li>
+              <form action="../adminmodule/userBatchUpdate" method='GET' enctype="multipart/form-data" id="courseForm">
 
 
+                <input type="text" name="sid" id="sid" value="{{i.id}}" hidden>
+                {% for b in batches%}
 
+                {% if b.cid in j %}
+                <label>{{b}}</label>
+                {% if b in ba %}
+                
+                <input type="checkbox" name="selectedBatch" value="{{b.pk}}" checked onchange="this.form.submit()"><br>
+                {% else %}
+                <input type="checkbox" name="selectedBatch" value="{{b.pk}}" onchange="this.form.submit()"><br>
+                {% endif %}
+
+                {% endif %}
+                {% endfor %}
+              </form>
+
+              
+              
+            </li>
+          </ul>
         </td>
       </tr>
       {% endfor %}

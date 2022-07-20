@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
 
@@ -92,14 +93,20 @@
                             required style="height: 50px;">
                         <br>
                         <div class="pass-box">
-                            <input name="spassword" type="password" id="Passwords" class="form-control"
+                            <input name="spassword" type="password" id="Passwords" class="form-control password"
                             placeholder="Password" required style="height: 50px;">
                             <br>
                             <i class="fa fa-eye-slash" aria-hidden="true" id="eyes"></i>
                         </div>
+                        <div class="pass-box">
+                            <input name="spassword" type="password" id="CPasswords" class="form-control cpassword"
+                            placeholder=" Confirm Password" required style="height: 50px;">
+                            <br>
+                            
+                        </div>
                         
                         <br>
-                        <button class="btn btn-lg btn-primary btn-block" type="submit" style="width: 100%;">
+                        <button class="btn btn-lg btn-primary btn-block button" type="submit" style="width: 100%;">
                             Sign
                             in
                         </button>
@@ -219,6 +226,19 @@
                 e.firstChild.classList.add("fa-times");
             }
         }
+       doucment.queryselector('button').onclick = function()
+       {
+        var password=doucment.queryselector('.password').value;
+        var cpassword=doucment.queryselector('.cpassword').value;
+           if(password == ""){
+           alert("feild can't be empty");
+           }
+           else if(password != cpassword)
+           {
+            alert("password and confirm password did not matched . Try Again!");
+            return false;
+           }
+       }
     </script>
     <!-- Student login Modal -->
     <div class="modal fade" id="studentLoginModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -241,7 +261,7 @@
                             <i class="fa fa-eye-slash" aria-hidden="true" id="eye"></i>
                         </div>
                         <br>
-                        <button class="btn btn-lg btn-primary btn-block" type="submit"
+                        <button class="btn btn-lg btn-primary btn-block " type="submit"
                             style="width: 100%;">login</button>
                     </form>
                 </div>

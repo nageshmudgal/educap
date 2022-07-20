@@ -25,7 +25,6 @@ def home(request):
     except:
         return redirect('../adminmodule/login')
 
-
 def login(request):
     if request.method == "POST":
         email = request.POST['email']
@@ -49,7 +48,6 @@ def logout(request):
         return redirect('../')
     except:
         return redirect("../adminmodule/login")
-
 
 def course(request):
     # try:
@@ -102,25 +100,21 @@ def Batches(request):
         days=request.POST.getlist('days')
         date=request.POST['date']
         time=request.POST['time']
-        print(id)
-        print(days)
-        print(date)
-        print(time)
         a=' '.join(days)
-        print(a)
         c = Course.objects.get(id=id)
         ins = Batch(cid=c,days=a,date=date,time=time,a=am)
         print(ins)
         ins.save()
-        
-        
         return redirect('course')
-    return redirect('course')    
+    return redirect('course') 
+   
 def batchcontent(request):
     data=request.GET['data']
-    b = Batch.objects.get(id=data,status="active")
+    c=request.GET['course']
+    b = Batch.objects.get(cid=c,status="active")
     v=Batch_videos.objects.filter(bid=b,status="active")
-    return render(request, 'adminmodule/batchcontent.html',{'b':b ,'v':v,"admin": Admins.objects.get(id=request.session['userid'])})
+    return render(request, 'adminmodule/batchcontent.html',{'b':b ,'v':v,"c":c,"admin": Admins.objects.get(id=request.session['userid'])})
+
 def batchvideo(request):
     if request.method == "POST":
         id = request.POST['bid']
@@ -130,14 +124,40 @@ def batchvideo(request):
         b = Batch.objects.get(id=id,status="active")
         ins=Batch_videos(bid=b, name=name, file=f)
         ins.save()
-        return redirect("course")
-    return redirect("course")
+        return redirect("Batches")
+    return redirect("Batches")
 
 def viewbatch(request):
     courses = Course.objects.filter(status="active")
     batch = Batch.objects.filter(status="active")
     view =  Batch_videos.objects.filter(status="active")
-    params = {"batch": batch,'course': courses ,"view":view ,"admin": Admins.objects.get(id=request.session['userid'])}
+   
+    f = request.GET.get('f')
+    # print(f)
+    if   f=='1':
+                u = Course.objects.filter(status="active").order_by('name')  
+                print(u)      
+    elif f=='2':
+                u =  Batch.objects.filter(~Q(status="deleted")).order_by('days')
+                print(u)         
+    elif f=='3':
+                u =  Batch.objects.filter(~Q(status="deleted")).order_by('-date')  
+                print(u) 
+    elif f:                                                                         # search
+            if len(f)>20:
+                u = Batch.objects.none()
+            else:
+                allcourseName= Course.objects.filter(name__icontains=f).filter(~Q(status="deleted"))
+                allbatchesdays= Batch.objects.filter(days__icontains=f).filter(~Q(status="deleted"))
+                u = allcourseName.union(allbatchesdays)
+                print(allcourseName,allbatchesdays)
+                    # if u.count()==0:
+                    #     messages.warning(request, "No search results found. Please refine your query.")
+    else:
+        u = Batch.objects.filter(status="active")      
+        
+
+    params = {"batch": u,'course': courses ,"view":view ,"admin": Admins.objects.get(id=request.session['userid'])}
     return render(request, 'adminmodule/viewbatch.html', params)
 
 def editbatch(request):
@@ -157,7 +177,6 @@ def editbatch(request):
         Batch.objects.filter(cid=c).update(cid=c,days=a,date=date,time=time,a=am)
         
         return redirect("viewbatch")
-        
 
 def viewcourse(request):
     try:
@@ -207,7 +226,6 @@ def video(request):
         ins.save()
     return redirect("course")
 
-
 def editCourse(request):
     try:
         if request.session['userid'] !="":
@@ -222,7 +240,6 @@ def editCourse(request):
             return redirect('../adminmodule')
     except:
         return redirect('../adminmodule')
-
 
 def editassignment(request):
     try:
@@ -247,6 +264,7 @@ def editassignment(request):
             return redirect('../adminmodule')
     except:
         return redirect('../adminmodule')
+
 def editNotes(request):
     try:
         if request.session['userid'] !="":
@@ -283,6 +301,25 @@ def editvideo(request):
             return redirect('../adminmodule')
     except:
         return redirect('../adminmodule')
+
+def editBatchvideo(request):
+    try:
+        if request.session['userid'] !="":
+            if request.method == "POST":
+                cid = request.POST['bid']
+                n = request.POST['name']
+                f = request.FILES.get('video')
+                print(cid,n,f)
+                Batch.objects.filter(id=cid).update(name=n)
+                ins = Batch_videos.objects.get(id=cid)
+                ins.file=f
+                ins.save()
+            return redirect("Batches")
+        else:
+            return redirect('../adminmodule')
+    except:
+        return redirect('../adminmodule')
+
 def deleteinstance(request):
     if request.GET['op']=='1':
         b = request.GET['data']
@@ -307,15 +344,18 @@ def deleteinstance(request):
     if request.GET['op']=='6':
         b = request.GET['data']
         Student.objects.filter(pk=b).update(status="deleted")
-        return redirect('showusers')
+    if request.GET['op']=='7':
+        b = request.GET['data']
+        Batch_videos.objects.filter(pk=b).update(status="deleted")
+        return redirect('Batches')
     return HttpResponse("Error")
-
 
 def showusers(request):
     # try:
         if request.session['userid'] != "":
             user = Admins.objects.get(id=request.session['userid'])
             c = Course.objects.filter(status="active")
+            bat = Batch.objects.filter(status="active")
 
             
             f = request.GET.get('f')
@@ -358,12 +398,13 @@ def showusers(request):
                 u = Student.objects.filter(~Q(status="deleted"))
             
             d = {}
-            l=[]
+            l1=[]
+            l2=[]
             for i in u:
                 a = Student.objects.get(id=i.id)
-                l.append(a.course.all())
+                l1.append(a.course.all())
+                l2.append(a.batch.all())
             
-
             en = request.GET.get('entry')
             if en:
                 request.session['entry']= int(en)
@@ -372,17 +413,20 @@ def showusers(request):
             page_num = request.GET.get('page')
             student_page = student_paginator.get_page(page_num)
 
-            course_paginator = Paginator(l,request.session['entry'])
+            course_paginator = Paginator(l1,request.session['entry'])
             course_page = course_paginator.get_page(page_num)
 
-            print(l)
-            us = zip(student_page,course_page)
+            batch_paginator = Paginator(l2,request.session['entry'])
+            batch_page = batch_paginator.get_page(page_num)
+            
+            us = zip(student_page,course_page,batch_page)
 
             d["admin"]=user
             d["users"]=us
             print(us)
             d['user']=student_page
             d["courses"]=c
+            d["batches"]=bat
             d["enteries"]=request.session['entry']
             
             return render(request, 'adminmodule/showusers.html', d)
@@ -393,7 +437,7 @@ def showusers(request):
         return redirect('../adminmodule/login')
 
 def activateuser(request):
-    #try:
+    try:
         if request.session['userid'] !="":
             b = request.GET['data']
             ins = Student.objects.get(pk=b)
@@ -429,8 +473,8 @@ def activateuser(request):
             return redirect('../adminmodule/showusers')
         else:
             return redirect('../adminmodule/login')
-    #except:
-    #    return redirect('../adminmodule/login')
+    except:
+        return redirect('../adminmodule/login')
     # try:
     #     if request.session['userid'] !="":
     #         b = request.GET['data']
@@ -474,3 +518,28 @@ def userCourseUpdate(request):
     except:
         return redirect('../adminmodule/login')
 
+def userBatchUpdate(request):
+    try:
+        if request.session['userid'] !="":
+            
+            stu = Student.objects.get(id=request.GET["sid"])
+            
+            for i in Batch.objects.all():
+                try:
+                    stu.batch.remove(i)
+                except:
+                    pass
+            # removed all Batches from student
+
+
+            l = request.GET.getlist('selectedBatch')
+            for i in l:
+                b= Batch.objects.get(id=i)
+                stu.batch.add(b)
+            # all selected Batches
+
+            return redirect('../adminmodule/showusers')
+        else:
+            return redirect('../adminmodule/login')
+    except:
+        return redirect('../adminmodule/login')

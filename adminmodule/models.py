@@ -44,12 +44,12 @@ class Video(models.Model):
 class Batch(models.Model):
     cid = models.ForeignKey(Course,on_delete=models.CASCADE)
     days = models.CharField(max_length=100,default=" ")
-    date= models.CharField(max_length=100,default=" ")
+    date= models.DateField()
     time= models.CharField(max_length=100,default=" ")
     a=models.CharField(max_length=50,default="Pm")
     status = models.CharField(max_length=10, default="active")
     def __str__(self):
-        return self.days
+        return str(self.cid.name)+(self.time)
 
 class Batch_videos(models.Model):
     bid = models.ForeignKey(Batch,on_delete=models.CASCADE)

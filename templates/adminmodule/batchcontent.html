@@ -1,7 +1,15 @@
 {% extends "./base.html" %}
 {% block content %}
+<script>
+  function filldata(names) {
+    document.getElementById("id").value = names.pk
+    document.getElementById("name").value = names.name
+    document.getElementById("file").value = names.file
+  }
+</script>
+
 <div class="row shadow p-3 mb-3 bg-body rounded m-1 border">
-<h2>Batches</h2>
+<h2>Batches video  "{{b.cid}}"</h2>
 </div>
 <!-- add Video Modal -->
 <div class="modal fade" id="addVideoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -13,6 +21,7 @@
         </div>
         <div class="modal-body">
           <form action="../adminmodule/batchvideo" method="post" enctype="multipart/form-data">
+            <p></p>
             <input type="text" hidden name="bid" value="{{b.id}}"> 
             <p>Name:</p>
             <input type="text" name="names" required><br>
@@ -30,7 +39,34 @@
       </div>
     </div>
   </div>
-
+{% comment %} edit {% endcomment %}
+  <div class="modal fade" id="EditVideoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Add video</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="../adminmodule/editBatchvideo" method="post" enctype="multipart/form-data">
+            <p></p>
+            <input type="text" hidden name="bid" value="{{b.id}}" id="id"> 
+            <p>Name:</p>
+            <input type="text" name="names" required id="name"><br>
+            <p>File:</p>
+            <input type="file" name="video" required id="file"><br>
+  
+  
+            {% csrf_token %}
+            <div class="modal-footer">
+              <input type="submit" class="btn btn-primary" value="Add"><br>
+            </div>
+  
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 
 <!-- Button trigger modal Videos -->
 
@@ -38,5 +74,52 @@
 data-bs-target="#addVideoModal">
 Add video
 </button>
+<div class="overflow-auto" style="height: 551px;">
+<br><br>
+
+  {% if v %}
+  <table class="table table-striped project-orders-table shadow p-3 mb-3 bg-body border rounded">
+    <thead>
+      <tr>
+        <th class="ml-5">SNo.</th>
+        <th style="width: 50%;">Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for i in v %}
+      <tr>
+        <td>{{forloop.counter}}</td>
+        <td>{{i.name}}</td>
+        <td>
+  
+          <div class="d-flex align-items-center">
+            <button type="button" class="btn btn-success btn-sm btn-icon-text">
+              <a href="../media/{{i.file}}" style="text-decoration:none; color: #ffffff;" target="_blank"
+                class="mx-2"><b>VIEW</b></a>
+            </button>
+            <button type="button" class="btn btn-info btn-sm btn-icon-text ms-2"
+              onclick="filldata({'pk':'{{i.pk}}','name':'{{i.name}}','file':'{{i.file}}'})" data-bs-toggle="modal"
+              data-bs-target="#EditVideoModal">
+              Edit
+              <i class="typcn typcn-edit btn-icon-append"></i>
+            </button>
+            <button type="button" class="btn btn-danger btn-sm btn-icon-text ms-2">
+              <a name="delete" href="../adminmodule/deleteinstance?data={{i.pk}}&op=7"
+                style="text-decoration:None; color:white;">Delete</a>
+              <i class="typcn typcn-delete-outline btn-icon-append"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <h3 class="mx-auto" style="width: 400px;">
+    There are no Batch Videos
+  </h3>
+  {% endif %}
 </div>
+
+
 {% endblock content %}
