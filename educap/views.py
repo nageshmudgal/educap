@@ -7,8 +7,6 @@ from adminmodule.models import Course,Assignment,Notes,Video
 def home(request):
     courses = Course.objects.filter(status='active')
     params = {'courses':courses}
-
-
     try:
         user = Student.objects.get(id=request.session['studentuser'])
 
