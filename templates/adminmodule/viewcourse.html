@@ -1,7 +1,25 @@
 {% extends "./base.html" %}
 {% block content %}
 
+
 <script>
+
+  function hey(a) {
+    if (a == 1) {
+      document.getElementById("content").innerHTML = document.getElementById("notes").innerHTML
+    }
+    if (a == 2) {
+      document.getElementById("content").innerHTML = document.getElementById("videos").innerHTML
+
+    }
+    if (a == 3) {
+      document.getElementById("content").innerHTML = document.getElementById("assignments").innerHTML
+
+    }
+
+  }
+
+
   function filldata1(names) {
     document.getElementById("editid1").value = names.pk
     document.getElementById("editname1").value = names.name
@@ -193,165 +211,229 @@
   <h2>{{course.name}} Files</h2>
 </div>
 
-<!-- Button trigger modal assignment-->
-<div style="margin-left: 69%;">
-  <button style="align-items: left;" type="button" class="btn btn-primary" data-bs-toggle="modal"
-    data-bs-target="#addAssignmentModal">
-    Add Assignment
-  </button>
+<div class="row">
+  <div class="col-8">
+    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+      aria-expanded="false">
+      Content
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+      <li>
+        <input type="radio" id="html" name="fav_language" value="HTML" onchange="hey(1)">
+        <label for="html">Notes</label><br>
+        <input type="radio" id="css" name="fav_language" value="CSS" onchange="hey(2)">
+        <label for="css">Video Lecture</label><br>
+        <input type="radio" id="javascript" name="fav_language" value="JavaScript" onchange="hey(3)">
+        <label for="javascript">Assignments</label>
+      </li>
+    </ul>
+  </div>
+  <div class="col-4">
+    <!-- Button trigger modal assignment-->
 
-<!-- Button trigger modal notes -->
-  <button style="align-items: left;" type="button" class="btn btn-primary style" data-bs-toggle="modal"
-    data-bs-target="#addNotesModal">
-    Add Notes
-  </button>
+    <button style="align-items: left;" type="button" class="btn btn-primary" data-bs-toggle="modal"
+      data-bs-target="#addAssignmentModal">
+      Add Assignment
+    </button>
 
-<!-- Button trigger modal Videos -->
+    <!-- Button trigger modal notes -->
+    <button style="align-items: left;" type="button" class="btn btn-primary style" data-bs-toggle="modal"
+      data-bs-target="#addNotesModal">
+      Add Notes
+    </button>
 
-  <button style="align-items: left;" type="button" class="btn btn-primary" data-bs-toggle="modal"
-    data-bs-target="#addVideoModal">
-    Add video
-  </button>
+    <!-- Button trigger modal Videos -->
+    <button style="align-items: left;" type="button" class="btn btn-primary" data-bs-toggle="modal"
+      data-bs-target="#addVideoModal">
+      Add video
+    </button>
+  </div>
+</div>
+
+<div class="overflow-auto" style="height: 548px;" id="content">
+  <h3>Notes</h3>
+  {% if notes %}
+  <table class="table table-striped project-orders-table shadow p-3 mb-3 bg-body border rounded">
+    <thead>
+      <tr>
+        <th class="ml-5">SNo.</th>
+        <th style="width: 50%;">Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for i in notes %}
+      <tr>
+        <td>{{forloop.counter}}</td>
+        <td>{{i.name}}</td>
+        <td>
+
+          <div class="d-flex align-items-center">
+            <button type="button" class="btn btn-success btn-sm btn-icon-text">
+              <a href="../media/{{i.file}}" style="text-decoration:none; color: #ffffff;" target="_blank"
+                class="mx-2"><b>VIEW</b></a>
+            </button>
+            <button type="button" class="btn btn-info btn-sm btn-icon-text ms-2"
+              onclick="filldata2({'pk':'{{i.pk}}','name':'{{i.name}}','file':'{{i.file}}'})" data-bs-toggle="modal"
+              data-bs-target="#editNotesModal">
+              Edit
+              <i class="typcn typcn-edit btn-icon-append"></i>
+            </button>
+            <button type="button" class="btn btn-danger btn-sm btn-icon-text ms-2">
+              <a name="delete" href="../adminmodule/deleteinstance?data={{i.pk}}&op=2"
+                style="text-decoration:None; color:white;">Delete</a>
+              <i class="typcn typcn-delete-outline btn-icon-append"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <h3 class="mx-auto" style="width: 400px;">
+    There is no Notes
+  </h3>
+  {% endif %}
 </div>
 
 
-<div class="overflow-auto" style="height: 551px;">
+<div id="notes" hidden>
+  <h3>Notes</h3>
+  {% if notes %}
+  <table class="table table-striped project-orders-table shadow p-3 mb-3 bg-body border rounded">
+    <thead>
+      <tr>
+        <th class="ml-5">SNo.</th>
+        <th style="width: 50%;">Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for i in notes %}
+      <tr>
+        <td>{{forloop.counter}}</td>
+        <td>{{i.name}}</td>
+        <td>
 
-<h3>Notes</h3>
-{% if notes %}
-<table class="table table-striped project-orders-table shadow p-3 mb-3 bg-body border rounded">
-  <thead>
-    <tr>
-      <th class="ml-5">SNo.</th>
-      <th style="width: 50%;">Name</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for i in notes %}
-    <tr>
-      <td>{{forloop.counter}}</td>
-      <td>{{i.name}}</td>
-      <td>
+          <div class="d-flex align-items-center">
+            <button type="button" class="btn btn-success btn-sm btn-icon-text">
+              <a href="../media/{{i.file}}" style="text-decoration:none; color: #ffffff;" target="_blank"
+                class="mx-2"><b>VIEW</b></a>
+            </button>
+            <button type="button" class="btn btn-info btn-sm btn-icon-text ms-2"
+              onclick="filldata2({'pk':'{{i.pk}}','name':'{{i.name}}','file':'{{i.file}}'})" data-bs-toggle="modal"
+              data-bs-target="#editNotesModal">
+              Edit
+              <i class="typcn typcn-edit btn-icon-append"></i>
+            </button>
+            <button type="button" class="btn btn-danger btn-sm btn-icon-text ms-2">
+              <a name="delete" href="../adminmodule/deleteinstance?data={{i.pk}}&op=2"
+                style="text-decoration:None; color:white;">Delete</a>
+              <i class="typcn typcn-delete-outline btn-icon-append"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <h3 class="mx-auto" style="width: 400px;">
+    There is no Notes
+  </h3>
+  {% endif %}
+</div>
 
-        <div class="d-flex align-items-center">
-          <button type="button" class="btn btn-success btn-sm btn-icon-text">
-            <a href="../media/{{i.file}}" style="text-decoration:none; color: #ffffff;" target="_blank"
-              class="mx-2"><b>VIEW</b></a>
-          </button>
-          <button type="button" class="btn btn-info btn-sm btn-icon-text ms-2"
-            onclick="filldata2({'pk':'{{i.pk}}','name':'{{i.name}}','file':'{{i.file}}'})" data-bs-toggle="modal"
-            data-bs-target="#editNotesModal">
-            Edit
-            <i class="typcn typcn-edit btn-icon-append"></i>
-          </button>
-          <button type="button" class="btn btn-danger btn-sm btn-icon-text ms-2">
-            <a name="delete" href="../adminmodule/deleteinstance?data={{i.pk}}&op=2"
-              style="text-decoration:None; color:white;">Delete</a>
-            <i class="typcn typcn-delete-outline btn-icon-append"></i>
-          </button>
-        </div>
-      </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-{% else %}
-<h3 class="mx-auto" style="width: 400px;">
-  There is no Notes
-</h3>
-{% endif %}
+<div id="assignments" hidden>
+  <h3>Assignments</h3>
+  {% if assignments %}
+  <table class="table table-striped project-orders-table shadow p-3 mb-3 bg-body border rounded">
+    <thead>
+      <tr>
+        <th class="ml-5">SNo.</th>
+        <th style="width: 50%;">Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for i in assignments %}
+      <tr>
+        <td>{{forloop.counter}}</td>
+        <td>{{i.name}}</td>
+        <td>
 
-<br>
-<h3>Assignments</h3>
-{% if assignments %}
-<table class="table table-striped project-orders-table shadow p-3 mb-3 bg-body border rounded">
-  <thead>
-    <tr>
-      <th class="ml-5">SNo.</th>
-      <th style="width: 50%;">Name</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for i in assignments %}
-    <tr>
-      <td>{{forloop.counter}}</td>
-      <td>{{i.name}}</td>
-      <td>
+          <div class="d-flex align-items-center">
+            <button type="button" class="btn btn-success btn-sm btn-icon-text">
+              <a href="../media/{{i.file}}" style="text-decoration:none; color: #ffffff;" target="_blank"
+                class="mx-2"><b>VIEW</b></a>
+            </button>
+            <button type="button" class="btn btn-info btn-sm btn-icon-text ms-2"
+              onclick="filldata1({'pk':'{{i.pk}}','name':'{{i.name}}','file':'{{i.file}}'})" data-bs-toggle="modal"
+              data-bs-target="#editAssignmentModal">
+              Edit
+              <i class="typcn typcn-edit btn-icon-append"></i>
+            </button>
+            <button type="button" class="btn btn-danger btn-sm btn-icon-text ms-2">
+              <a name="delete" href="../adminmodule/deleteinstance?data={{i.pk}}&op=3"
+                style="text-decoration:None; color:white;">Delete</a>
+              <i class="typcn typcn-delete-outline btn-icon-append"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <h3 class="mx-auto" style="width: 400px;">
+    There is no Assignments
+  </h3>
+  {% endif %}
+</div>
 
-        <div class="d-flex align-items-center">
-          <button type="button" class="btn btn-success btn-sm btn-icon-text">
-            <a href="../media/{{i.file}}" style="text-decoration:none; color: #ffffff;" target="_blank"
-              class="mx-2"><b>VIEW</b></a>
-          </button>
-          <button type="button" class="btn btn-info btn-sm btn-icon-text ms-2"
-            onclick="filldata1({'pk':'{{i.pk}}','name':'{{i.name}}','file':'{{i.file}}'})" data-bs-toggle="modal"
-            data-bs-target="#editAssignmentModal">
-            Edit
-            <i class="typcn typcn-edit btn-icon-append"></i>
-          </button>
-          <button type="button" class="btn btn-danger btn-sm btn-icon-text ms-2">
-            <a name="delete" href="../adminmodule/deleteinstance?data={{i.pk}}&op=3"
-              style="text-decoration:None; color:white;">Delete</a>
-            <i class="typcn typcn-delete-outline btn-icon-append"></i>
-          </button>
-        </div>
-      </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-{% else %}
-<h3 class="mx-auto" style="width: 400px;">
-  There is no Assignments
-</h3>
-{% endif %}
+<div id="videos" hidden>
+  <h3>Videos</h3>
+  {% if videos %}
+  <table class="table table-striped project-orders-table shadow p-3 mb-3 bg-body border rounded">
+    <thead>
+      <tr>
+        <th class="ml-5">SNo.</th>
+        <th style="width: 50%;">Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for i in videos %}
+      <tr>
+        <td>{{forloop.counter}}</td>
+        <td>{{i.name}}</td>
+        <td>
 
-
-<br>
-<h3>Videos</h3>
-{% if videos %}
-<table class="table table-striped project-orders-table shadow p-3 mb-3 bg-body border rounded">
-  <thead>
-    <tr>
-      <th class="ml-5">SNo.</th>
-      <th style="width: 50%;">Name</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for i in videos %}
-    <tr>
-      <td>{{forloop.counter}}</td>
-      <td>{{i.name}}</td>
-      <td>
-
-        <div class="d-flex align-items-center">
-          <button type="button" class="btn btn-success btn-sm btn-icon-text">
-            <a href="../media/{{i.file}}" style="text-decoration:none; color: #ffffff;" target="_blank"
-              class="mx-2"><b>VIEW</b></a>
-          </button>
-          <button type="button" class="btn btn-info btn-sm btn-icon-text ms-2"
-            onclick="filldata3({'pk':'{{i.pk}}','name':'{{i.name}}','file':'{{i.file}}'})" data-bs-toggle="modal"
-            data-bs-target="#editvideoModal">
-            Edit
-            <i class="typcn typcn-edit btn-icon-append"></i>
-          </button>
-          <button type="button" class="btn btn-danger btn-sm btn-icon-text ms-2">
-            <a name="delete" href="../adminmodule/deleteinstance?data={{i.pk}}&op=4"
-              style="text-decoration:None; color:white;">Delete</a>
-            <i class="typcn typcn-delete-outline btn-icon-append"></i>
-          </button>
-        </div>
-      </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-{% else %}
-<h3 class="mx-auto" style="width: 400px;">
-  There is no Videos
-</h3>
-{% endif %}
-
+          <div class="d-flex align-items-center">
+            <button type="button" class="btn btn-success btn-sm btn-icon-text">
+              <a href="../media/{{i.file}}" style="text-decoration:none; color: #ffffff;" target="_blank"
+                class="mx-2"><b>VIEW</b></a>
+            </button>
+            <button type="button" class="btn btn-info btn-sm btn-icon-text ms-2"
+              onclick="filldata3({'pk':'{{i.pk}}','name':'{{i.name}}','file':'{{i.file}}'})" data-bs-toggle="modal"
+              data-bs-target="#editvideoModal">
+              Edit
+              <i class="typcn typcn-edit btn-icon-append"></i>
+            </button>
+            <button type="button" class="btn btn-danger btn-sm btn-icon-text ms-2">
+              <a name="delete" href="../adminmodule/deleteinstance?data={{i.pk}}&op=4"
+                style="text-decoration:None; color:white;">Delete</a>
+              <i class="typcn typcn-delete-outline btn-icon-append"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <h3 class="mx-auto" style="width: 400px;">
+    There is no Videos
+  </h3>
+  {% endif %}
+</div>
 <!-- <nav aria-label="Page navigation example">
   <ul class="pagination" class="mx-auto">
     {% if members.has_previous %}

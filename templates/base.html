@@ -130,6 +130,7 @@
             </div>
         </div>
     </div>
+
     <script>
         document.getElementById("eyes").addEventListener("click", function () {
             x = document.getElementById("Passwords");
@@ -240,6 +241,7 @@
            }
        }
     </script>
+
     <!-- Student login Modal -->
     <div class="modal fade" id="studentLoginModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -270,6 +272,7 @@
             </div>
         </div>
     </div>
+
     <!-- Faculty Register Modal -->
     <div class="modal fade" id="facultyLoginModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -306,6 +309,7 @@
             </div>
         </div>
     </div>
+    
     <!-- update profile Modal -->
     <div class="modal fade" id="updateprofileModal" tabindex="-1" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
@@ -424,8 +428,8 @@
                         </li>
                         {% endif %}
                     </ul>
-                    <form class="d-flex">
-                        <input class="form-control me-2 rounded-pill" type="search" placeholder="Search"
+                    <form class="d-flex" action="../" method="get">
+                        <input class="form-control me-2 rounded-pill" type="search" name="searchquery" placeholder="Search"
                             aria-label="Search">
                         <button class="btn btn-outline-success rounded-4" type="submit">
                             Search

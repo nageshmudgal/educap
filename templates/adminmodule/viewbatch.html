@@ -2,11 +2,20 @@
 {% block content %}
 <script>
     function filldata(names){
-      document.getElementById("course").value=names.course
+      document.getElementById("course").value=names.pk
       document.getElementById("time").value=names.time
       document.getElementById("date").value=names.date
+      console.log(names.date)
+      console.log(names.a)
       document.getElementById("days").value=names.days
-      document.getElementById("a").value=names.a
+      // document.getElementById("ampm").value=names.a
+      if(names.a='Am'){
+        document.getElementById("Am").setAttribute("selected")
+      }
+      if(names.a='Pm'){
+        document.getElementById("Pm").setAttribute("selected")
+      }
+      
     }
     
     </script>
@@ -45,15 +54,19 @@
         Starting Date:
       </p>
       <input type="date" name="date" id="date" required>
+
       <p>
         Time:
       </p>
-      <input type="time" name="time"  id ="time" required>
-      <select name="a" id="a">
-        <option value="Am">
+      <input type="time" name="time" id ="time" required>
+      <select name="a" id="ampm">
+        <option>
+          -
+        </option>
+        <option value="Am" id="Am">
           Am
         </option>
-        <option value="Pm">
+        <option value="Pm" id="Pm">
           Pm
         </option>
       </select>
@@ -126,6 +139,7 @@
 </div>
 </div>
 </div>
+
 <div class="row shadow p-3 mb-3 bg-body rounded m-1 border">
 <h2>Batches</h2>
 </div>
@@ -136,7 +150,7 @@
       Showing{{enteries}} of {{user|length}}&nbsp;&nbsp;
       <select name="entry" onchange="this.form.submit()">
         <option>
-          &nbsp;&nbsp; -----------&nbsp;&nbsp;
+          -
         </option>
         <option value="5">
           5
@@ -189,6 +203,7 @@
   </div>
 </div>
 <br>
+<div class="overflow-auto" style="height: 520px;">
 {% if batch %}
 <table class="table table-striped project-orders-table shadow p-3 mb-3 bg-body border rounded">
   <thead>
@@ -225,7 +240,7 @@
             d="M12.96 14H9.028v-.691l2.579-3.72v-.054H9.098v-.867h3.785v.691l-2.567 3.72v.054h2.645V14zM4.5 2.5a.5.5 0 0 0-1 0v9.793l-1.146-1.147a.5.5 0 0 0-.708.708l2 1.999.007.007a.497.497 0 0 0 .7-.006l2-2a.5.5 0 0 0-.707-.708L4.5 12.293V2.5z" />
         </svg>
       </a></th>
-      <th>time</th>
+      <th>Time</th>
       <th>Status</th>
     </tr>
   </thead>
@@ -248,20 +263,22 @@
           <div class="d-flex align-items-center">
             <button type="button" class="btn btn-danger btn-sm btn-icon-text">
               <a name="delete"
-                 href="../adminmodule/batchcontent?data={{ i.pk }}&course={{i.cid.pk}}"
+                 href="../adminmodule/batchcontent?data={{ i.pk }}"
                  style="text-decoration:None;
                         color:white;">View</a>
               <i class="typcn typcn-edit btn-icon-append"></i>
             </button>
+            
             <button type="button"
-                    class="btn btn-success btn-sm btn-icon-text mr-3"
-                     onclick="filldata({'pk':'{{ i.cid.pk }}','days':'{{ i.days }}','time':'{{ i.time }},'date':{{i.date}},'a':{{i.a}}})" 
+                    class="btn btn-success btn-sm btn-icon-text ms-2"
+                     onclick="filldata({'pk':'{{ i.cid.pk }}','days':'{{ i.days }}','time':'{{ i.time }}','date':`{{i.date|date:'Y-m-d'}}`,'a':'{{i.a}}'})" 
                     data-bs-toggle="modal"
                     data-bs-target="#editBatchesModal">
+                    <!-- 'course':'{{i.cid}}' -->
                       Edit
               <i class="typcn typcn-edit btn-icon-append"></i>
             </button>
-            <button type="button" class="btn btn-danger btn-sm btn-icon-text">
+            <button type="button" class="btn btn-danger btn-sm btn-icon-text ms-2">
               <a name="delete"
                  href="../adminmodule/deleteinstance?data={{ i.pk }}&op=5"
                  style="text-decoration:None;
@@ -274,9 +291,25 @@
     {% endfor %}
   </tbody>
 </table>
+
+<nav aria-label="Page navigation example">
+  <ul class="pagination" class="mx-auto">
+    {% if batch.has_previous %}
+    <li class="page-item"><a class="page-link"
+        href="{% url 'viewbatch' %}?page={{ batch.previous_page_number }}">Previous</a></li>
+    {% endif %}
+    <li class="page-item"><a class="page-link" href="#">{{batch.number}}</a></li>
+    {% if batch.has_next %}
+    <li class="page-item"><a class="page-link" href="{% url 'viewbatch' %}?page={{ batch.next_page_number }}">Next</a>
+    </li>
+    {% endif %}
+  </ul>
+</nav>
+
 {% else %}
 <h3 class="mx-auto" style="width: 400px;">
   There is no Batches
 </h3>
 {% endif %}
+</div>
 {% endblock content %}

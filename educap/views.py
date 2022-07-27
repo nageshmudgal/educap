@@ -2,11 +2,15 @@ from django.shortcuts import HttpResponse,render,redirect
 from django.contrib.auth.models import User
 from django.contrib import messages
 from student.models import Student
-from adminmodule.models import Course,Assignment,Notes,Video
+from adminmodule.models import Course,Assignment,Notes,Video,Batch,Batch_videos
 
 def home(request):
-    courses = Course.objects.filter(status='active')
+    try:
+        courses = Course.objects.filter(name__icontains=request.GET.get('searchquery'))
+    except: 
+        courses = Course.objects.filter(status='active')
     params = {'courses':courses}
+
     try:
         user = Student.objects.get(id=request.session['studentuser'])
 
@@ -29,8 +33,7 @@ def syllabus(request):
     except:
         params={'notes':n,'course':c}
         return render(request,'syllabus.html',params)
-    
-  
+
 def studentRegistration(request):
     if request.method=='POST':
         email = request.POST.get('email')
@@ -76,7 +79,18 @@ def viewcourse(request):
             n = Notes.objects.filter(cid=c,status="active")
             a = Assignment.objects.filter(cid=c, status="active")
             v = Video.objects.filter(cid=c, status="active")
-            params = {'course': c,"notes":n,"assignments":a,"videos":v,"studentuser":user1}
+            courseBatches = Batch.objects.filter(cid=c)
+            # allstuofbatch = Student.objects.none()
+            batvid = Batch_videos.objects.none()
+            for i in courseBatches:
+                stuofbatch = Student.objects.filter(batch=i)
+
+                if user1 in stuofbatch:
+                    b = Batch_videos.objects.filter(bid=i)
+                    batvid = batvid.union(b)
+            
+            print(batvid)
+            params = {'course': c,"notes":n,"assignments":a,"videos":v,"batchvideos":batvid,"studentuser":user1}
             return render(request,"viewcourse.html",params)
         else:
             messages.warning(request,'You are not enrolled for this Course')
@@ -84,3 +98,4 @@ def viewcourse(request):
     except:
         messages.warning(request,'Login First')
         return redirect('../')
+

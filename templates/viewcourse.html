@@ -2,160 +2,244 @@
 {% block content %}
 
 <script>
-  function hey(a){
-    if(a==1){
-      document.getElementById("content").innerHTML=document.getElementById("notes").innerHTML
+  
+  function hey(a) {
+    if (a == 1) {
+      document.getElementById("content").innerHTML = document.getElementById("notes").innerHTML
+    }
+    if (a == 2) {
+      document.getElementById("content").innerHTML = document.getElementById("videos").innerHTML
 
     }
-    if(a==2){
-      document.getElementById("content").innerHTML=document.getElementById("videos").innerHTML
+    if (a == 3) {
+      document.getElementById("content").innerHTML = document.getElementById("assignments").innerHTML
 
     }
-    if(a==3){
-      document.getElementById("content").innerHTML=document.getElementById("assignments").innerHTML
+    if (a == 4) {
+      document.getElementById("content").innerHTML = document.getElementById("batchvideos").innerHTML
 
     }
   }
-  console.log("j")
+  console.log("a")
 </script>
 
 <div class="mx-auto mb-5 fs-5 bold" style="width: 200px;">
   <h1>{{course.name}}</h1>
 </div>
 
-<!-- <select onselect="hey()">
-  <option>Notes</option>
-  <option>Video Lectures</option>
-  <option>Assignments</option>
-</select> -->
-
-
+<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+  aria-expanded="false">
+  Content
+</a>
+<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+  <li>
 <input type="radio" id="html" name="fav_language" value="HTML" onchange="hey(1)">
 <label for="html">Notes</label><br>
 <input type="radio" id="css" name="fav_language" value="CSS" onchange="hey(2)">
 <label for="css">Video Lecture</label><br>
 <input type="radio" id="javascript" name="fav_language" value="JavaScript" onchange="hey(3)">
-<label for="javascript">Assignments</label>
+<label for="javascript">Assignments</label><br>
+<input type="radio" id="scss" name="fav_language" value="SCSS" onchange="hey(4)">
+<label for="scss">Batch Video</label>
+</li>
+</ul>
 
 
 <div class="container mb-5" id="content">
 
-</div>
-<div hidden id="notes">
-{% if notes %}
-<div class="container mb-5">
-  <div class="mb-2  fs-5 bold" style="width: 200px;">
-    <h1>Notes</h1>
-  </div>
-  <div class="row">
-
-
-    {% for i in notes %}
-    <div class="col-4">
-
-      <div class="card mt-4" style="width: 18rem;">
-        <div class="ratio ratio-4x3">
-          <!-- <iframe src="../media/4151486.png" scrolling="no" style="overflow:auto;" seamless="seamless" title="course file"></iframe> -->
-          <img src="../media/4151486.png">
-        </div>
-
-        <div class="card-body">
-          <p class="card-text">{{i.name}}</p>
-          <div class="d-flex align-items-center">
-            <button type="button" class="btn btn-success btn-sm btn-icon-text me-2">
-              <a href="../media/{{i.file}}" style="text-decoration:none; color: #ffffff;" target="_blank"
-                class="mx-2"><b>VIEW</b></a>
-            </button>
+  <div>
+    {% if notes %}
+    <div class="container mb-5">
+      <div class="mb-2  fs-5 bold" style="width: 200px;">
+        <h1>Notes</h1>
+      </div>
+      <div class="row">
+  
+  
+        {% for i in notes %}
+        <div class="col-4">
+  
+          <div class="card mt-4" style="width: 18rem;">
+            <div class="ratio ratio-4x3">
+              <!-- <iframe src="../media/4151486.png" scrolling="no" style="overflow:auto;" seamless="seamless" title="course file"></iframe> -->
+              <img src="../media/4151486.png">
+            </div>
+  
+            <div class="card-body">
+              <p class="card-text">{{i.name}}</p>
+              <div class="d-flex align-items-center">
+                <button type="button" class="btn btn-success btn-sm btn-icon-text me-2">
+                  <a href="../media/{{i.file}}" style="text-decoration:none; color: #ffffff;" target="_blank"
+                    class="mx-2"><b>VIEW</b></a>
+                </button>
+              </div>
+            </div>
+  
           </div>
         </div>
-
+        {% endfor %}
+  
       </div>
     </div>
-    {% endfor %}
-
+    {% else %}
+    No notes to Show
+    {% endif %}
   </div>
-</div>
-{% else %}
+  
 
-{% endif %}
+</div>
+
+<div hidden id="notes">
+  {% if notes %}
+  <div class="container mb-5">
+    <div class="mb-2  fs-5 bold" style="width: 200px;">
+      <h1>Notes</h1>
+    </div>
+    <div class="row">
+
+
+      {% for i in notes %}
+      <div class="col-4">
+
+        <div class="card mt-4" style="width: 18rem;">
+          <div class="ratio ratio-4x3">
+            <!-- <iframe src="../media/4151486.png" scrolling="no" style="overflow:auto;" seamless="seamless" title="course file"></iframe> -->
+            <img src="../media/4151486.png">
+          </div>
+
+          <div class="card-body">
+            <p class="card-text">{{i.name}}</p>
+            <div class="d-flex align-items-center">
+              <button type="button" class="btn btn-success btn-sm btn-icon-text me-2">
+                <a href="../media/{{i.file}}" style="text-decoration:none; color: #ffffff;" target="_blank"
+                  class="mx-2"><b>VIEW</b></a>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      {% endfor %}
+
+    </div>
+  </div>
+  {% else %}
+  No Notes to Show
+  {% endif %}
 </div>
 
 
 
 <div hidden id="assignments">
-{% if assignments %}
-<div class="container mb-5">
-  <div class="mb-2 fs-5 bold" style="width: 200px;">
-    <h1>Assignments</h1>
-  </div>
-  <div class="row">
-
-
-    {% for i in assignments %}
-    <div class="col-4">
-
-      <div class="card mt-4" style="width: 18rem;">
-        <div class="ratio ratio-4x3">
-          <!-- <iframe src="../media/{{i.file}}" title="course file" allowfullscreen></iframe> -->
-          <img src="../media/4151486.png">
-        </div>
-
-        <div class="card-body">
-          <p class="card-text">{{i.name}}</p>
-          <div class="d-flex align-items-center">
-            <button type="button" class="btn btn-success btn-sm btn-icon-text me-2">
-              <a href="../media/{{i.file}}" style="text-decoration:none; color: #ffffff;" target="_blank"
-                class="mx-2"><b>VIEW</b></a>
-            </button>
-          </div>
-        </div>
-
-      </div>
+  {% if assignments %}
+  <div class="container mb-5">
+    <div class="mb-2 fs-5 bold" style="width: 200px;">
+      <h1>Assignments</h1>
     </div>
-    {% endfor %}
+    <div class="row">
 
+
+      {% for i in assignments %}
+      <div class="col-4">
+
+        <div class="card mt-4" style="width: 18rem;">
+          <div class="ratio ratio-4x3">
+            <!-- <iframe src="../media/{{i.file}}" title="course file" allowfullscreen></iframe> -->
+            <img src="../media/4151486.png">
+          </div>
+
+          <div class="card-body">
+            <p class="card-text">{{i.name}}</p>
+            <div class="d-flex align-items-center">
+              <button type="button" class="btn btn-success btn-sm btn-icon-text me-2">
+                <a href="../media/{{i.file}}" style="text-decoration:none; color: #ffffff;" target="_blank"
+                  class="mx-2"><b>VIEW</b></a>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      {% endfor %}
+
+    </div>
   </div>
-</div>
-{% else %}
-
-{% endif %}
+  {% else %}
+  No Assignments to Show
+  {% endif %}
 </div>
 
 <div hidden id="videos">
-{% if videos %}
-<div class="container mb-5">
-  <div class="mb-2 fs-5 bold" style="width: 200px;">
-    <h1>Videos</h1>
-  </div>
-  <div class="row">
-
-
-    {% for i in videos %}
-    <div class="col-4">
-
-      <div class="card mt-4" style="width: 18rem;">
-        <div class="ratio ratio-16x9">
-
-
-          <video width="400" height="350" controlsList="nodownload" controls poster="../media/video-start.png">
-          <source src="../media/{{i.file}}" type="video/mp4">
-          </video>
-        </div>
-
-        <div class="card-body">
-          <p class="card-text">{{i.name}}</p>
-        </div>
-
-      </div>
+  {% if videos %}
+  <div class="container mb-5">
+    <div class="mb-2 fs-5 bold" style="width: 200px;">
+      <h1>Videos</h1>
     </div>
-    {% endfor %}
+    <div class="row">
 
+
+      {% for i in videos %}
+      <div class="col-4">
+
+        <div class="card mt-4" style="width: 18rem;">
+          <div class="ratio ratio-16x9">
+
+
+            <video width="400" height="350" controlsList="nodownload" controls poster="../media/video-start.png">
+              <source src="../media/{{i.file}}" type="video/mp4">
+            </video>
+          </div>
+
+          <div class="card-body">
+            <p class="card-text">{{i.name}}</p>
+          </div>
+
+        </div>
+      </div>
+      {% endfor %}
+
+    </div>
   </div>
+  {% else %}
+  No Videos to Show
+  {% endif %}
 </div>
-{% else %}
+
+
+<div hidden id="batchvideos">
+  {% if batchvideos %}
+  <div class="container mb-5">
+    <div class="mb-2 fs-5 bold" style="width: 250px;">
+      <h1>Batch Videos</h1>
+    </div>
+    <div class="row">
+      {% for i in batchvideos %}
+      <div class="col-4">
+
+        <div class="card mt-4" style="width: 18rem;">
+          <div class="ratio ratio-16x9">
+
+
+            <video width="400" height="350" controlsList="nodownload" controls poster="../media/video-start.png">
+              <source src="../media/{{i.file}}" type="video/mp4">
+            </video>
+          </div>
+
+          <div class="card-body">
+            <p class="card-text">{{i.name}}</p>
+          </div>
+
+        </div>
+      </div>
+      {% endfor %}
+
+    </div>
+  </div>
+  {% else %}
+  Not enrolled in any Batch
+  {% endif %}
 </div>
 
 
 
-{% endif %}
 {% endblock %}

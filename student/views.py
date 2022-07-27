@@ -107,16 +107,18 @@ def profileupdate(request):
                 n = request.POST['name']
                 e = request.POST['email']
                 m = request.POST['mobile']
+                i = request.FILES.get('imag')
 
                 Student.objects.filter(id=request.session['studentuser']).update(sname=n)
                 Student.objects.filter(id=request.session['studentuser']).update(semail=e)
                 Student.objects.filter(id=request.session['studentuser']).update(smobile=m)
-                # if i:
-                #     image_path = user1.img.path
-                #     if os.path.exists(image_path):
-                #         os.remove(image_path)
-                #     user1.img=i
-                #     user1.save()
+                if i:
+                    image_path = user1.img.path
+                    if os.path.exists(image_path):
+                        os.remove(image_path)
+                    
+                    user1.img=i
+                    user1.save()
             return redirect('../student')
         else:
             return redirect('../student')

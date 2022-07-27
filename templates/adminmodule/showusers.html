@@ -27,7 +27,7 @@
   <div class="col-3">
     <form class="d-flex" action="../adminmodule/showusers" method="get">
 
-      Showing {{enteries}} of {{user|length}}
+      Showing {{user|length}} of {{enteries}}
       <select name="entry" onchange="this.form.submit()">
         <option>
           -
@@ -46,10 +46,10 @@
     </form>
   </div>
 
-  <div class="col-3">
+  <div class="col-2">
     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
       aria-expanded="false">
-      Filter
+      Course Filter
     </a>
     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
       <li>
@@ -70,8 +70,32 @@
       </li>
     </ul>
   </div>
+  <div class="col-2">
+    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+      aria-expanded="false">
+      Batch Filter
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+      <li>
+        <form class="d-flex" action="../adminmodule/showusers" method="get" name="entryForm">
 
-  <div class="col-6">
+          {% for a in batches %}
+          
+          <label for="vehicle1">{{a}}</label>
+          <input type="checkbox" name="selectedBatchFilter" value="{{a.pk}}">
+          
+          {% endfor %}
+
+          <label for="vehicle1">Deleted</label>
+          <input type="checkbox" name="selectedCourseFilter" value="Deleted">
+          <button class="btn btn-lg btn-primary btn-block" type="submit" style="width: 100%;">Filter</button>
+        </form>
+      
+      </li>
+    </ul>
+  </div>
+
+  <div class="col-5">
     <form class="d-flex" action="../adminmodule/showusers" method="get">
 
       <input class="form-control me-2 rounded-pill" type="search" name="f" placeholder="Search" aria-label="Search">
@@ -87,7 +111,7 @@
 
 <div class="overflow-auto" style="height: 520px;">
   {% if users %}
-  <table class="table table-striped project-orders-table shadow p-3 mb-5 bg-body border rounded" style="font-size: 12px;">
+  <table class="table table-striped project-orders-table shadow p-3 mb-5 bg-body border rounded" style="font-size: 13px;">
     <thead>
       <tr>
         <th class="ml-5">Serial No.</th>
@@ -142,6 +166,7 @@
         <td>{{i.semail}}</td>
         <td>{{i.status}}</td>
         <td>{{i.date}}</td>
+        {% if i.status != "deleted" %}
         <td>
           {% if i.status == "Inactive" %}
           <button type="button" class="btn btn-success btn-sm btn-icon-text mr-3">
@@ -168,6 +193,8 @@
             
           </button>
         </td>
+        {% else %}
+        {% endif %}
         <td>
           {% for k in j %}
           {{k}}

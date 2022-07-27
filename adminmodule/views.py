@@ -110,10 +110,10 @@ def Batches(request):
    
 def batchcontent(request):
     data=request.GET['data']
-    c=request.GET['course']
-    b = Batch.objects.get(cid=c,status="active")
-    v=Batch_videos.objects.filter(bid=b,status="active")
-    return render(request, 'adminmodule/batchcontent.html',{'b':b ,'v':v,"c":c,"admin": Admins.objects.get(id=request.session['userid'])})
+    
+    b = Batch.objects.get(id=data,status="active")
+    v = Batch_videos.objects.filter(bid=b,status="active")
+    return render(request, 'adminmodule/batchcontent.html',{'b':b ,'v':v,"admin": Admins.objects.get(id=request.session['userid'])})
 
 def batchvideo(request):
     if request.method == "POST":
@@ -124,7 +124,7 @@ def batchvideo(request):
         b = Batch.objects.get(id=id,status="active")
         ins=Batch_videos(bid=b, name=name, file=f)
         ins.save()
-        return redirect("Batches")
+        return redirect("viewbatch")
     return redirect("Batches")
 
 def viewbatch(request):
@@ -135,7 +135,7 @@ def viewbatch(request):
     f = request.GET.get('f')
     # print(f)
     if   f=='1':
-                u = Course.objects.filter(status="active").order_by('name')  
+                u = Batch.objects.filter(status="active").order_by('cid')  
                 print(u)      
     elif f=='2':
                 u =  Batch.objects.filter(~Q(status="deleted")).order_by('days')
@@ -148,16 +148,39 @@ def viewbatch(request):
                 u = Batch.objects.none()
             else:
                 allcourseName= Course.objects.filter(name__icontains=f).filter(~Q(status="deleted"))
+                allbatchesname = Batch.objects.none()
+                for i in allcourseName:
+                    temp = Batch.objects.filter(cid=i)
+                    allbatchesname = allbatchesname.union(temp)
+
                 allbatchesdays= Batch.objects.filter(days__icontains=f).filter(~Q(status="deleted"))
-                u = allcourseName.union(allbatchesdays)
-                print(allcourseName,allbatchesdays)
+                u = allbatchesname.union(allbatchesdays)
+                
                     # if u.count()==0:
                     #     messages.warning(request, "No search results found. Please refine your query.")
+    
+    elif request.GET.getlist('selectedCourseFilter'):                               # Coursewise filter
+
+        filterlist = request.GET.getlist('selectedCourseFilter')
+        if "Deleted" in filterlist:
+            u = Batch.objects.filter(status="deleted")
+            filterlist.remove("Deleted")
+        else:
+            u = Batch.objects.all()
+        
+        for i in filterlist:
+            co = Course.objects.get(id=i)
+            temp = Batch.objects.filter(cid=co)
+            u = u & temp
     else:
         u = Batch.objects.filter(status="active")      
-        
+    
+    Batch_paginator = Paginator(u, request.session['entry'])
+    page_num = request.GET.get('page')
+    Batch_page = Batch_paginator.get_page(page_num)
+    print(Batch.objects.get(id=11).date)
 
-    params = {"batch": u,'course': courses ,"view":view ,"admin": Admins.objects.get(id=request.session['userid'])}
+    params = {"batch": Batch_page,'course': courses ,"view":view ,"admin": Admins.objects.get(id=request.session['userid'])}
     return render(request, 'adminmodule/viewbatch.html', params)
 
 def editbatch(request):
@@ -167,14 +190,14 @@ def editbatch(request):
         days=request.POST.getlist('days')
         date=request.POST['date']
         time=request.POST['time']
-        print(id)
-        print(days)
         print(date)
-        print(time)
         a=' '.join(days)
         print(a)
         c = Course.objects.get(id=id)
         Batch.objects.filter(cid=c).update(cid=c,days=a,date=date,time=time,a=am)
+        b = Batch.objects.get(cid=c)
+        print(b.date)
+
         
         return redirect("viewbatch")
 
@@ -351,7 +374,7 @@ def deleteinstance(request):
     return HttpResponse("Error")
 
 def showusers(request):
-    # try:
+    try:
         if request.session['userid'] != "":
             user = Admins.objects.get(id=request.session['userid'])
             c = Course.objects.filter(status="active")
@@ -378,7 +401,7 @@ def showusers(request):
                     
                     return redirect('showusers')
 
-            elif request.GET.getlist('selectedCourseFilter'):                               # filter
+            elif request.GET.getlist('selectedCourseFilter'):                               # Coursewise filter
 
                 filterlist = request.GET.getlist('selectedCourseFilter')
 
@@ -392,8 +415,20 @@ def showusers(request):
                     co = Course.objects.get(id=i)
                     temp = Student.objects.filter(course=co)
                     u = u & temp
-                    print(u)
+            elif request.GET.getlist('selectedBatchFilter'):                               # Batchwise filter
 
+                filterlist = request.GET.getlist('selectedBatchFilter')
+
+                if "Deleted" in filterlist:
+                    u = Student.objects.filter(status="deleted")
+                    filterlist.remove("Deleted")
+                else:
+                    u = Student.objects.all()
+                
+                for i in filterlist:
+                    b = Batch.objects.get(id=i)
+                    temp = Student.objects.filter(batch=b)
+                    u = u & temp
             else:
                 u = Student.objects.filter(~Q(status="deleted"))
             
@@ -423,7 +458,6 @@ def showusers(request):
 
             d["admin"]=user
             d["users"]=us
-            print(us)
             d['user']=student_page
             d["courses"]=c
             d["batches"]=bat
@@ -433,7 +467,7 @@ def showusers(request):
         else:
 
             return redirect('../adminmodule/login')
-    # except:
+    except:
         return redirect('../adminmodule/login')
 
 def activateuser(request):
@@ -497,20 +531,28 @@ def userCourseUpdate(request):
         if request.session['userid'] !="":
             
             stu = Student.objects.get(id=request.GET["sid"])
-            
+
+            # Remove student from batch which got unselected
+            cr = stu.course.all()
+            for i in cr:
+                if i.id not in request.GET.getlist('selectedCourse'):
+                    br = Batch.objects.filter(cid=i)
+                    for j in br:
+                        stu.batch.remove(j)
+
+            # removed all Courses from student
             for i in Course.objects.all():
                 try:
                     stu.course.remove(i)
                 except:
                     pass
-            # removed all Courses from student
-
-
+            
+            # Add all selected Courses
             l = request.GET.getlist('selectedCourse')
             for i in l:
                 c= Course.objects.get(id=i)
                 stu.course.add(c)
-            # all selected Courses
+            
 
             return redirect('../adminmodule/showusers')
         else:
