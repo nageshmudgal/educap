@@ -41,7 +41,6 @@ def studentRegistration(request):
         firstname=request.POST.get('firstname')
         lastname=request.POST.get('lastname')
         username=request.POST.get('username')
-        print(email,password,firstname,lastname,username)
         if User.objects.filter(email=email).exists():
             messages.warning(request,"Email already exits")
             return redirect('/')
@@ -89,7 +88,6 @@ def viewcourse(request):
                     b = Batch_videos.objects.filter(bid=i)
                     batvid = batvid.union(b)
             
-            print(batvid)
             params = {'course': c,"notes":n,"assignments":a,"videos":v,"batchvideos":batvid,"studentuser":user1}
             return render(request,"viewcourse.html",params)
         else:

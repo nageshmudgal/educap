@@ -45,7 +45,6 @@ def signup(request):
         semail = request.POST['semail']
         smobile = request.POST['smobile']
         password = request.POST['spassword']
-        print(semail, password, sname, smobile)
         allemails = Student.objects.values_list("semail",flat=True)
         if semail in allemails:
             messages.warning(request, "Email is already registered")
@@ -133,7 +132,6 @@ def changepass(request):
             if request.method == "POST":
                 pas1 = request.POST['pas1']
                 pas2 = request.POST['pas2']
-                print
                 if pas1!=user1.password:
                     messages.warning(request,"old password isn't matching")
                     return redirect('../student')

@@ -31,7 +31,6 @@ def login(request):
         pas = request.POST['pas']
         try:
             user = Admins.objects.get(email=email,password=pas)
-            print(user)
             request.session['userid']=user.id
             request.session['entry']=5
             return redirect("../adminmodule")
@@ -55,7 +54,6 @@ def course(request):
             name = request.POST['name']
             d = request.POST['desc']
             ins = Course(name=name, desc=d)
-            print(ins)
             ins.save()
 
         f = request.GET.get('f')
@@ -103,7 +101,6 @@ def Batches(request):
         a=' '.join(days)
         c = Course.objects.get(id=id)
         ins = Batch(cid=c,days=a,date=date,time=time,a=am)
-        print(ins)
         ins.save()
         return redirect('course')
     return redirect('course') 
@@ -120,7 +117,6 @@ def batchvideo(request):
         id = request.POST['bid']
         name = request.POST['names']
         f = request.FILES.get('video')
-        print(id,name,f)
         b = Batch.objects.get(id=id,status="active")
         ins=Batch_videos(bid=b, name=name, file=f)
         ins.save()
@@ -133,16 +129,15 @@ def viewbatch(request):
     view =  Batch_videos.objects.filter(status="active")
    
     f = request.GET.get('f')
-    # print(f)
     if   f=='1':
                 u = Batch.objects.filter(status="active").order_by('cid')  
-                print(u)      
+                
     elif f=='2':
                 u =  Batch.objects.filter(~Q(status="deleted")).order_by('days')
-                print(u)         
+                         
     elif f=='3':
                 u =  Batch.objects.filter(~Q(status="deleted")).order_by('-date')  
-                print(u) 
+                
     elif f:                                                                         # search
             if len(f)>20:
                 u = Batch.objects.none()
@@ -182,7 +177,6 @@ def viewbatch(request):
     else:
         page_num=1
     Batch_page = Batch_paginator.get_page(page_num)
-    print(Batch.objects.get(id=11).date)
 
     params = {"batch": Batch_page,'course': courses ,"view":view ,"admin": Admins.objects.get(id=request.session['userid'])}
     return render(request, 'adminmodule/viewbatch.html', params)
@@ -194,15 +188,10 @@ def editbatch(request):
         days=request.POST.getlist('days')
         date=request.POST['date']
         time=request.POST['time']
-        print(date)
         a=' '.join(days)
-        print(a)
         c = Course.objects.get(id=id)
         Batch.objects.filter(cid=c).update(cid=c,days=a,date=date,time=time,a=am)
         b = Batch.objects.get(cid=c)
-        print(b.date)
-
-        
         return redirect("viewbatch")
 
 def viewcourse(request):
@@ -225,7 +214,6 @@ def assignment(request):
         cid = request.POST['cid']
         name = request.POST['name']
         f = request.FILES.get('assignment')
-        print(name)
         c = Course.objects.get(id=cid)
         ins = Assignment(cid=c, name=name, file=f)
         ins.save()
@@ -236,7 +224,6 @@ def notes(request):
         cid = request.POST['cid']
         name = request.POST['name']
         f = request.FILES.get('notes')
-        print(f)
         c = Course.objects.get(id=cid)
         ins = Notes(cid=c, name=name, file=f)
         ins.save()
@@ -247,7 +234,6 @@ def video(request):
         cid = request.POST['cid']
         name = request.POST['name']
         f = request.FILES.get('video')
-        print(name)
         c = Course.objects.get(id=cid)
         ins = Video(cid=c, name=name, file=f)
         ins.save()
@@ -275,7 +261,6 @@ def editassignment(request):
                 cid = request.POST['cid']
                 n = request.POST['name']
                 f = request.FILES.get('assignment')
-                print(cid,n,f)
                 Assignment.objects.filter(id=cid).update(name=n)
                 ins = Assignment.objects.get(id=cid)
                 ins.file=f
@@ -299,7 +284,6 @@ def editNotes(request):
                 cid = request.POST['cid']
                 n = request.POST['name']
                 f = request.FILES.get('notes')
-                print(cid,n,f)
                 Notes.objects.filter(id=cid).update(name=n)
                 
                 ins = Notes.objects.get(id=cid)
@@ -318,7 +302,6 @@ def editvideo(request):
                 cid = request.POST['cid']
                 n = request.POST['name']
                 f = request.FILES.get('video')
-                print(cid,n,f)
                 Video.objects.filter(id=cid).update(name=n)
                 ins = Video.objects.get(id=cid)
                 ins.file=f
@@ -336,7 +319,6 @@ def editBatchvideo(request):
                 cid = request.POST['bid']
                 n = request.POST['name']
                 f = request.FILES.get('video')
-                print(cid,n,f)
                 Batch.objects.filter(id=cid).update(name=n)
                 ins = Batch_videos.objects.get(id=cid)
                 ins.file=f
