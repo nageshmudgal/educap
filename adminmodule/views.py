@@ -176,7 +176,11 @@ def viewbatch(request):
         u = Batch.objects.filter(status="active")      
     
     Batch_paginator = Paginator(u, request.session['entry'])
-    page_num = request.GET.get('page')
+
+    if request.GET.get('page'):
+        page_num = request.GET.get('page')
+    else:
+        page_num=1
     Batch_page = Batch_paginator.get_page(page_num)
     print(Batch.objects.get(id=11).date)
 
