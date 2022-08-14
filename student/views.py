@@ -22,24 +22,30 @@ def signup(request):
     if request.method == 'GET':
         get_otp = request.GET['gotp']
         if get_otp:
-            get_userid=request.GET['userid']
-            user=Student.objects.get(id=get_userid)
-            if int(get_otp) == User_Otp.objects.filter(user=user).last().otp :
+            get_userid = request.GET['userid']        # user data list
+            user_data = get_userid.split(",")
+            print(user_data)
+            print(user_data[1])
+            otp_obj = User_Otp.objects.filter(user_email=user_data[1])
+            otp_obj = otp_obj.last()
+            if int(get_otp) == otp_obj.otp :
+                user = Student(sname=user_data[0], semail=user_data[1], smobile=user_data[2], password=user_data[3])
+                user.save()
+                
                 messages.success(request, "Account has been created")
-                mess= f'Hello, {user.sname} \n your account has been successfully created \n Please wait for admin to active it. \n Thanks.'
+                mess= f'Hello, {user_data[0]} \n your account has been successfully created \n Please wait for admin to active it. \n Thanks.'
                 send_mail(
                 "Welcome to Educap ",
                 mess, 
                 settings.EMAIL_HOST_USER,
-                [user.semail],
+                [user_data[1]],
                 fail_silently = False
-
                 )
                 
                 return redirect('../')
             else:
                 messages.error(request, "You have entered wrong OTP")
-                return render(request,'../student/otp.html',{'otp':True,'user':user})
+                return render(request,'otp.html',{'otp':True,'user':get_userid})
     if request.method == 'POST':
         sname = request.POST['sname']
         semail = request.POST['semail']
@@ -48,13 +54,15 @@ def signup(request):
         allemails = Student.objects.values_list("semail",flat=True)
         if semail in allemails:
             messages.warning(request, "Email is already registered")
+            return redirect('../')
             
-
-        user = Student(sname=sname, semail=semail, smobile=smobile, password=password)
-        user.save()
+        
+        l = sname+","+semail+","+smobile+","+password
+        
         user_opt=random.randint(100000,999999)
 
-        User_Otp.objects.create(user=user,otp= user_opt)
+        User_Otp.objects.create(user_email=semail,otp= user_opt)
+        print(user_opt)
         mess= f'Hello, {sname} \n your otp is {user_opt} \n Thanks.'
         send_mail(
             "Welcome to Educap - verify your email",
@@ -62,9 +70,8 @@ def signup(request):
             settings.EMAIL_HOST_USER,
             [semail],
             fail_silently = False
-
         )
-        return render(request,'otp.html',{'otp':True,'user':user})
+        return render(request,'otp.html',{'otp':True,'user':l})
         return redirect('../')
     return redirect('../')
 
@@ -81,6 +88,7 @@ def login(request):
             request.session['studentuser'] = user.id
             return redirect("../student/")
         except:
+            messages.warning(request, "Invalid Credentials")
             return redirect("../")
     return redirect("../")
 

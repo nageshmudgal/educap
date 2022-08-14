@@ -18,7 +18,7 @@ class Student(models.Model):
         return self.sname
 
 class User_Otp(models.Model):
-     user=models.ForeignKey(Student,on_delete=models.CASCADE)
+     user_email = models.CharField(max_length=50,blank=True)
      time_st=models.DateTimeField(auto_now=True, auto_now_add=False)
      otp=models.SmallIntegerField()
     #  def __str__(self):
