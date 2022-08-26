@@ -37,6 +37,7 @@
     document.getElementById("editid3").value = names.pk
     document.getElementById("editname3").value = names.name
     document.getElementById("editfile3").value = names.file
+    console.log(names.pk,names.name,names.file)
   }
 </script>
 
@@ -144,7 +145,7 @@
 
           {% csrf_token %}
           <div class="modal-footer">
-            <input type="submit" class="btn btn-primary" value="Add"><br>
+            <input type="submit" class="btn btn-primary" value="Save"><br>
           </div>
 
         </form>
@@ -171,7 +172,7 @@
 
           {% csrf_token %}
           <div class="modal-footer">
-            <input type="submit" class="btn btn-primary" value="Add"><br>
+            <input type="submit" class="btn btn-primary" value="Save"><br>
           </div>
 
         </form>
@@ -196,7 +197,7 @@
           <input type="file" name="video" id="editfile3"><br>
           {% csrf_token %}
           <div class="modal-footer">
-            <input type="submit" class="btn btn-primary" value="Add"><br>
+            <input type="submit" class="btn btn-primary" value="Save"><br>
           </div>
 
         </form>

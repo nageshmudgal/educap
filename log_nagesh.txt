@@ -1,0 +1,19 @@
+16-07-22
+
+6:40PM-6:55PM
+date wise in student
+
+6:55PM-7:36PM
+student filter by course
+
+8:25 - 8:44
+course search
+course name sort
+
+
+17-07-22
+
+11:25AM-12:30AM
+add soft delete in user
+delete in sort
+

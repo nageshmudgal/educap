@@ -1,0 +1,45 @@
+{% extends "./base.html" %}
+{% block content %}
+<br>
+<div class="mx-auto mb-5 fs-5 bold" style="width: 300px;">
+  <h1>Search result</h1>
+</div>
+
+
+
+    {% if notes %}
+    <div class="container mb-5">
+      <div class="row">
+
+
+        {% for i in notes %}
+        <div class="col-4">
+
+          <div class="card mt-4" style="width: 18rem;">
+            <div class="ratio ratio-4x3">
+              <!-- <iframe src="../media/4151486.png" scrolling="no" style="overflow:auto;" seamless="seamless" title="course file"></iframe> -->
+              <img src="../media/4151486.png">
+            </div>
+
+            <div class="card-body">
+              <p class="card-text">{{i.name}}</p>
+              <div class="d-flex align-items-center">
+                <button type="button" class="btn btn-success btn-sm btn-icon-text me-2">
+                  <a href="../media/{{i.file}}" style="text-decoration:none; color: #ffffff;" target="_blank"
+                    class="mx-2"><b>VIEW</b></a>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        {% endfor %}
+
+      </div>
+    </div>
+    {% else %}
+    No Notes to Show
+    {% endif %}
+
+
+{% endblock %}

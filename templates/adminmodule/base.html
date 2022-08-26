@@ -50,6 +50,36 @@
         crossorigin="anonymous"></script>
 
 
+<!-- update password Modal -->
+<div class="modal fade" id="updatePasswordModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+aria-hidden="true">
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Password</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form action="../adminmodule/changepass" method="post" enctype="multipart/form-data">
+                <input name="pas1" type="password" id="inputPassword" class="form-control"
+                    placeholder="Old Password" required style="height: 50px;">
+                <br>
+                <input name="pas2" type="password" id="inputPassword" class="form-control"
+                    placeholder="New Password" required style="height: 50px;">
+                <br>
+                {% csrf_token %}
+                <button class="btn btn-lg btn-primary btn-block" type="submit"
+                    style="width: 100%;">Update</button>
+                <p class="mt-5 mb-3 text-muted">
+                    &copy; 2022
+                </p>
+            </form>
+        </div>
+        <div class="modal-footer"></div>
+    </div>
+</div>
+</div>
+                             <!-- Side Navbar -->
     <div class="container-fluid">
         <div class="row flex-nowrap">
 
@@ -131,10 +161,7 @@
                             <span class="d-none d-sm-inline mx-1 text-dark">{{admin.name}}</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-
-                            
-                            
-                            
+                            <li><a class="dropdown-item" href="" data-bs-toggle="modal" data-bs-target="#updatePasswordModal" style="color: black;">Password</a></li>
                             <li><a class="dropdown-item" href="../adminmodule/logout" style="color: black;">Log out</a></li>
                         </ul>
                     </div>

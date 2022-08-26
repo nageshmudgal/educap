@@ -1,8 +1,14 @@
 {% extends "./base.html" %}
 {% block content %}
+<style>
+    body {
+        background-image: url("https://wallpaper.dog/large/20382878.jpg");
+        
+       }
+</style>
 <div style="align-items: center;" class="p-5">
     <div class="mx-auto mb-5 fs-5 bold" style="width: 200px;">
-        <h1>Courses</h1>
+        <h1><b><u>Courses</b></u></h1>
     </div>
 
     <div class="container">
@@ -12,6 +18,7 @@
                 
                 <img src="media/{{i.img}}" class="card-img-top" alt="...">
                 <a href="../viewcourse?data={{i.pk}}"></a>
+                <center><b>{{i.name}}</b></center>
                 <div class="card-body">
                     <button type="button" class="btn btn-success btn-sm btn-icon-text">
                         <a name="delete"
@@ -22,7 +29,7 @@
                       </button>
                       <button type="button" class="btn btn-success btn-sm btn-icon-text">
                         <a name="delete"
-                           href="../viewcourse?data={{i.pk}}"
+                           href="../viewcourse?coid={{i.pk}}&type=notes"
                            style="text-decoration:None;
                                   color:white;">View Course</a>
                         <i class="typcn typcn-delete-outline btn-icon-append"></i>

@@ -2,9 +2,10 @@
 {% block content %}
 <script>
   function filldata(names) {
-    document.getElementById("id").value = names.pk
-    document.getElementById("name").value = names.name
-    document.getElementById("file").value = names.file
+    document.getElementById("editid").value = names.pk
+    document.getElementById("editname").value = names.name
+    // document.getElementById("editfile").value = names.file 
+    console.log(names.file,names.pk,names.name)
   }
 </script>
 
@@ -39,22 +40,22 @@
       </div>
     </div>
   </div>
-{% comment %} edit {% endcomment %}
+<!-- edit batch video-->
   <div class="modal fade" id="EditVideoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Add video</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Edit batch video</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <form action="../adminmodule/editBatchvideo" method="post" enctype="multipart/form-data">
             <p></p>
-            <input type="text" hidden name="bid" value="{{b.id}}" id="id"> 
+            <input type="text" hidden name="bid" id="editid"> 
             <p>Name:</p>
-            <input type="text" name="names" required id="name"><br>
+            <input type="text" name="names" required id="editname"><br>
             <p>File:</p>
-            <input type="file" name="video" required id="file"><br>
+            <input type="file" name="video"  id="editfile" required><br>
   
   
             {% csrf_token %}
@@ -72,7 +73,7 @@
 
 <button style="align-items: left;" type="button" class="btn btn-primary" data-bs-toggle="modal"
 data-bs-target="#addVideoModal">
-Add video
+Add batch video
 </button>
 <div class="overflow-auto" style="height: 551px;">
 <br><br>
@@ -100,7 +101,7 @@ Add video
             <button type="button" class="btn btn-info btn-sm btn-icon-text ms-2"
               onclick="filldata({'pk':'{{i.pk}}','name':'{{i.name}}','file':'{{i.file}}'})" data-bs-toggle="modal"
               data-bs-target="#EditVideoModal">
-              Edit
+              Edit 
               <i class="typcn typcn-edit btn-icon-append"></i>
             </button>
             <button type="button" class="btn btn-danger btn-sm btn-icon-text ms-2">

@@ -1,0 +1,43 @@
+{% extends "./base.html" %}
+{% block content %}
+<br>
+<div class="mx-auto mb-5 fs-5 bold" style="width: 300px;">
+  <h1>Search result</h1>
+</div>
+
+
+
+{% if batchvideos %}
+<div class="container mb-5">
+  <div class="mb-2 fs-5 bold" style="width: 250px;">
+    <h1>Batch Videos</h1>
+  </div>
+  <div class="row">
+    {% for i in batchvideos %}
+    <div class="col-4">
+
+      <div class="card mt-4" style="width: 18rem;">
+        <div class="ratio ratio-16x9">
+
+
+          <video width="400" height="350" controlsList="nodownload" controls poster="../media/video-start.png">
+            <source src="../media/{{i.file}}" type="video/mp4">
+          </video>
+        </div>
+
+        <div class="card-body">
+          <p class="card-text">{{i.name}}</p>
+        </div>
+
+      </div>
+    </div>
+    {% endfor %}
+
+  </div>
+</div>
+{% else %}
+No Video lecture to show
+{% endif %}
+
+
+{% endblock %}

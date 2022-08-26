@@ -86,6 +86,7 @@ def login(request):
                 messages.warning(request, "Not Activated by Admin")
                 return redirect("../")
             request.session['studentuser'] = user.id
+            messages.success(request,"Successfully Logged in")
             return redirect("../student/")
         except:
             messages.warning(request, "Invalid Credentials")
@@ -96,6 +97,7 @@ def login(request):
 def logout(request):
     try:
         del request.session['studentuser']
+        messages.success(request,"Successfully Logged out")
         return redirect('../')
     except:
         return redirect("../")
@@ -126,6 +128,7 @@ def profileupdate(request):
                     
                     user1.img=i
                     user1.save()
+                messages.warning(request,"Changes Saved")
             return redirect('../student')
         else:
             return redirect('../student')
@@ -144,6 +147,7 @@ def changepass(request):
                     messages.warning(request,"old password isn't matching")
                     return redirect('../student')
                 Student.objects.filter(id=request.session['studentuser']).update(password=pas2)
+                messages.success(request,"Password changed")
             return redirect('../student')
         else:
             return redirect('../student')

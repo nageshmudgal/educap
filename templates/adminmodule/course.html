@@ -19,15 +19,17 @@
       <div class="modal-body">
         <form action="../adminmodule/course" method="post" enctype="multipart/form-data">
           <p>
-            Course Name:
+          Course Name:
           </p>
           <input type="text" name="name" required>
           <br>
           <p>
-            Descriotion:
+          Description:
           </p>
           <input type="text" name="desc" required>
           <br>
+          <p>Image:</p>
+          <input type="file" name="image" required id="file"><br>
           {% csrf_token %}
           <div class="modal-footer">
             <input type="submit" class="btn btn-primary" value="Add">
@@ -131,13 +133,15 @@
           <p>
             Course Name:
           </p>
-          <input type="text" name="name" id="editname">
+          <input type="text" name="name" required id="editname">
           <br>
           <p>
             Description:
           </p>
-          <input type="text" name="desc" id="editdesc">
+          <input type="text" name="desc" required id="editdesc">
           <br>
+          <p>Image:</p>
+          <input type="file" name="image" id="file"><br>
           {% csrf_token %}
           <div class="modal-footer">
             <input type="submit" class="btn btn-primary" value="Save">
@@ -154,31 +158,33 @@
 </div>
 
 <!-- Button trigger modal -->
-<div class="row">
-  <div class="col-8"></div>
-  <div class="col-2">
+
+  <div class="col-16">
+ 
     <button style="align-items: left;" type="button" class="btn btn-primary" data-bs-toggle="modal"
       data-bs-target="#addCourseModal">
       Add Course
     </button>
-  </div>
-  <div class="col-2">
+  
+  
     <button style="align-items: left;" type="button" class="btn btn-primary" data-bs-toggle="modal"
       data-bs-target="#addBatchesModal">
       Add Batches
     </button>
-  </div>
+ 
 </div>
+
 <br>
+
 
 <div class="row">
   <div class="col-3">
     <form class="d-flex" action="../adminmodule/course" method="get">
 
-      Showing {{enteries}} of {{user|length}}
+      Showing {{enteries}} of {{user|length}} &nbsp; &nbsp; 
       <select name="entry" onchange="this.form.submit()">
         <option>
-          -
+          &nbsp; &nbsp; ------&nbsp;&nbsp; &nbsp;  
         </option>
         <option value="5">
           5
@@ -228,7 +234,7 @@
   </div>
 </div>
 
-
+<br>
 {% if courses %}
 <table class="table table-striped project-orders-table shadow p-3 mb-3 bg-body border rounded">
   <thead>

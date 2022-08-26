@@ -1,70 +1,46 @@
 {% extends "./base.html" %}
 {% block content %}
-
-<script>
-  
-  function hey(a) {
-    if (a == 1) {
-      document.getElementById("content").innerHTML = document.getElementById("notes").innerHTML
-    }
-    if (a == 2) {
-      document.getElementById("content").innerHTML = document.getElementById("videos").innerHTML
-
-    }
-    if (a == 3) {
-      document.getElementById("content").innerHTML = document.getElementById("assignments").innerHTML
-
-    }
-    if (a == 4) {
-      document.getElementById("content").innerHTML = document.getElementById("batchvideos").innerHTML
-
-    }
-  }
-  console.log("a")
-</script>
-
+<br>
 <div class="mx-auto mb-5 fs-5 bold" style="width: 200px;">
   <h1>{{course.name}}</h1>
 </div>
 
-<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
-  aria-expanded="false">
-  Content
-</a>
-<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-  <li>
-<input type="radio" id="html" name="fav_language" value="HTML" onchange="hey(1)">
-<label for="html">Notes</label><br>
-<input type="radio" id="css" name="fav_language" value="CSS" onchange="hey(2)">
-<label for="css">Video Lecture</label><br>
-<input type="radio" id="javascript" name="fav_language" value="JavaScript" onchange="hey(3)">
-<label for="javascript">Assignments</label><br>
-<input type="radio" id="scss" name="fav_language" value="SCSS" onchange="hey(4)">
-<label for="scss">Batch Video</label>
-</li>
-</ul>
-
-
-<div class="container mb-5" id="content">
-
-  <div>
+<nav>
+  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+    <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button"
+      role="tab" aria-controls="nav-home" aria-selected="true">Notes</button>
+    <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button"
+      role="tab" aria-controls="nav-profile" aria-selected="false" href="../viewcourse?coid={{i.pk}}&type=assignments">Assignments</button>
+    <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button"
+      role="tab" aria-controls="nav-contact" aria-selected="false">Videos</button>
+    <button class="nav-link" id="nav-disabled-tab" data-bs-toggle="tab" data-bs-target="#nav-disabled" type="button"
+      role="tab" aria-controls="nav-disabled" aria-selected="false">Lectures</button>
+  </div>
+</nav>
+<div class="tab-content" id="nav-tabContent">
+  <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
+    <form class="d-flex" action="../nsearch" method="get">
+      <input name="coid" type="text" value="{{course.pk}}" hidden>
+      <input class="form-control me-2 rounded-pill" type="search" name="searchquery" placeholder="Search"
+          aria-label="Search">
+      <button class="btn btn-outline-success rounded-4" type="submit">
+          Search
+      </button>
+  </form>
     {% if notes %}
     <div class="container mb-5">
-      <div class="mb-2  fs-5 bold" style="width: 200px;">
-        <h1>Notes</h1>
-      </div>
       <div class="row">
-  
-  
+
+
         {% for i in notes %}
         <div class="col-4">
-  
+
           <div class="card mt-4" style="width: 18rem;">
             <div class="ratio ratio-4x3">
               <!-- <iframe src="../media/4151486.png" scrolling="no" style="overflow:auto;" seamless="seamless" title="course file"></iframe> -->
               <img src="../media/4151486.png">
             </div>
-  
+
             <div class="card-body">
               <p class="card-text">{{i.name}}</p>
               <div class="d-flex align-items-center">
@@ -74,170 +50,139 @@
                 </button>
               </div>
             </div>
-  
+
           </div>
         </div>
         {% endfor %}
-  
+
       </div>
     </div>
     {% else %}
-    No notes to Show
+    No Notes to Show
     {% endif %}
   </div>
-  
+  <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
+    <form class="d-flex" action="../asearch" method="get">
+      <input name="coid" type="text" value="{{course.pk}}" hidden>
+      <input class="form-control me-2 rounded-pill" type="search" name="searchquery" placeholder="Search"
+          aria-label="Search">
+      <button class="btn btn-outline-success rounded-4" type="submit">
+          Search
+      </button>
+  </form>
+    {% if assignments %}
+    <div class="container mb-5">
+      <div class="row">
 
-</div>
 
-<div hidden id="notes">
-  {% if notes %}
-  <div class="container mb-5">
-    <div class="mb-2  fs-5 bold" style="width: 200px;">
-      <h1>Notes</h1>
-    </div>
-    <div class="row">
+        {% for i in assignments %}
+        <div class="col-4">
 
-
-      {% for i in notes %}
-      <div class="col-4">
-
-        <div class="card mt-4" style="width: 18rem;">
-          <div class="ratio ratio-4x3">
-            <!-- <iframe src="../media/4151486.png" scrolling="no" style="overflow:auto;" seamless="seamless" title="course file"></iframe> -->
-            <img src="../media/4151486.png">
-          </div>
-
-          <div class="card-body">
-            <p class="card-text">{{i.name}}</p>
-            <div class="d-flex align-items-center">
-              <button type="button" class="btn btn-success btn-sm btn-icon-text me-2">
-                <a href="../media/{{i.file}}" style="text-decoration:none; color: #ffffff;" target="_blank"
-                  class="mx-2"><b>VIEW</b></a>
-              </button>
+          <div class="card mt-4" style="width: 18rem;">
+            <div class="ratio ratio-4x3">
+              <!-- <iframe src="../media/{{i.file}}" title="course file" allowfullscreen></iframe> -->
+              <img src="../media/4151486.png">
             </div>
-          </div>
 
-        </div>
-      </div>
-      {% endfor %}
-
-    </div>
-  </div>
-  {% else %}
-  No Notes to Show
-  {% endif %}
-</div>
-
-
-
-<div hidden id="assignments">
-  {% if assignments %}
-  <div class="container mb-5">
-    <div class="mb-2 fs-5 bold" style="width: 200px;">
-      <h1>Assignments</h1>
-    </div>
-    <div class="row">
-
-
-      {% for i in assignments %}
-      <div class="col-4">
-
-        <div class="card mt-4" style="width: 18rem;">
-          <div class="ratio ratio-4x3">
-            <!-- <iframe src="../media/{{i.file}}" title="course file" allowfullscreen></iframe> -->
-            <img src="../media/4151486.png">
-          </div>
-
-          <div class="card-body">
-            <p class="card-text">{{i.name}}</p>
-            <div class="d-flex align-items-center">
-              <button type="button" class="btn btn-success btn-sm btn-icon-text me-2">
-                <a href="../media/{{i.file}}" style="text-decoration:none; color: #ffffff;" target="_blank"
-                  class="mx-2"><b>VIEW</b></a>
-              </button>
+            <div class="card-body">
+              <p class="card-text">{{i.name}}</p>
+              <div class="d-flex align-items-center">
+                <button type="button" class="btn btn-success btn-sm btn-icon-text me-2">
+                  <a href="../media/{{i.file}}" style="text-decoration:none; color: #ffffff;" target="_blank"
+                    class="mx-2"><b>VIEW</b></a>
+                </button>
+              </div>
             </div>
-          </div>
 
+          </div>
         </div>
+        {% endfor %}
+
       </div>
-      {% endfor %}
-
     </div>
+    {% else %}
+    No Assignments to Show
+    {% endif %}
   </div>
-  {% else %}
-  No Assignments to Show
-  {% endif %}
-</div>
-
-<div hidden id="videos">
-  {% if videos %}
-  <div class="container mb-5">
-    <div class="mb-2 fs-5 bold" style="width: 200px;">
-      <h1>Videos</h1>
-    </div>
-    <div class="row">
-
-
-      {% for i in videos %}
-      <div class="col-4">
-
-        <div class="card mt-4" style="width: 18rem;">
-          <div class="ratio ratio-16x9">
+  <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">
+    <form class="d-flex" action="../vsearch" method="get">
+      <input name="coid" type="text" value="{{course.pk}}" hidden>
+      <input class="form-control me-2 rounded-pill" type="search" name="searchquery" placeholder="Search"
+          aria-label="Search">
+      <button class="btn btn-outline-success rounded-4" type="submit">
+          Search
+      </button>
+  </form>
+    {% if videos %}
+    <div class="container mb-5">
+      <div class="row">
 
 
-            <video width="400" height="350" controlsList="nodownload" controls poster="../media/video-start.png">
-              <source src="../media/{{i.file}}" type="video/mp4">
-            </video>
+        {% for i in videos %}
+        <div class="col-4">
+
+          <div class="card mt-4" style="width: 18rem;">
+            <div class="ratio ratio-16x9">
+
+
+              <video width="400" height="350" controlsList="nodownload" controls poster="../media/video-start.png">
+                <source src="../media/{{i.file}}" type="video/mp4">
+              </video>
+            </div>
+
+            <div class="card-body">
+              <p class="card-text">{{i.name}}</p>
+            </div>
+
           </div>
-
-          <div class="card-body">
-            <p class="card-text">{{i.name}}</p>
-          </div>
-
         </div>
+        {% endfor %}
+
       </div>
-      {% endfor %}
-
     </div>
+    {% else %}
+    No Videos to Show
+    {% endif %}
+
   </div>
-  {% else %}
-  No Videos to Show
-  {% endif %}
-</div>
+  <div class="tab-pane fade" id="nav-disabled" role="tabpanel" aria-labelledby="nav-disabled-tab" tabindex="0">
+    {% if batchvideos %}
+    <form class="d-flex" action="../vlsearch" method="get">
+      <input name="coid" type="text" value="{{course.pk}}" hidden>
+      <input class="form-control me-2 rounded-pill" type="search" name="searchquery" placeholder="Search"
+          aria-label="Search">
+      <button class="btn btn-outline-success rounded-4" type="submit">
+          Search
+      </button>
+  </form>
+    <div class="container mb-5">
+      <div class="row">
+        {% for i in batchvideos %}
+        <div class="col-4">
+
+          <div class="card mt-4" style="width: 18rem;">
+            <div class="ratio ratio-16x9">
 
 
-<div hidden id="batchvideos">
-  {% if batchvideos %}
-  <div class="container mb-5">
-    <div class="mb-2 fs-5 bold" style="width: 250px;">
-      <h1>Batch Videos</h1>
-    </div>
-    <div class="row">
-      {% for i in batchvideos %}
-      <div class="col-4">
+              <video width="400" height="350" controlsList="nodownload" controls poster="../media/video-start.png">
+                <source src="../media/{{i.file}}" type="video/mp4">
+              </video>
+            </div>
 
-        <div class="card mt-4" style="width: 18rem;">
-          <div class="ratio ratio-16x9">
+            <div class="card-body">
+              <p class="card-text">{{i.name}}</p>
+            </div>
 
-
-            <video width="400" height="350" controlsList="nodownload" controls poster="../media/video-start.png">
-              <source src="../media/{{i.file}}" type="video/mp4">
-            </video>
           </div>
-
-          <div class="card-body">
-            <p class="card-text">{{i.name}}</p>
-          </div>
-
         </div>
-      </div>
-      {% endfor %}
+        {% endfor %}
 
+      </div>
     </div>
+    {% else %}
+    Not enrolled in any Batch
+    {% endif %}
   </div>
-  {% else %}
-  Not enrolled in any Batch
-  {% endif %}
 </div>
 
 

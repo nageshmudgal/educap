@@ -360,12 +360,14 @@
                 </div>
                 <div class="modal-body">
                     <form action="../student/changepass" method="post" enctype="multipart/form-data">
-                        <input name="pas1" type="password" id="inputPassword" class="form-control"
+                        <input name="pas1" type="password" id="pass" class="form-control"
                             placeholder="Old Password" required style="height: 50px;">
                         <br>
-                        <input name="pas2" type="password" id="inputPassword" class="form-control"
+                        <i class="fa fa-eye-slash" aria-hidden="true" id="eye"></i>
+                        <input name="pas2" type="password" id="pass2" class="form-control"
                             placeholder="New Password" required style="height: 50px;">
                         <br>
+                        <i class="fa fa-eye-slash" aria-hidden="true" id="eye"></i>
                         {% csrf_token %}
                         <button class="btn btn-lg btn-primary btn-block" type="submit"
                             style="width: 100%;">Update</button>
@@ -429,7 +431,7 @@
                         {% endif %}
                     </ul>
                     <form class="d-flex" action="../" method="get">
-                        <input class="form-control me-2 rounded-pill" type="search" name="searchquery" placeholder="Search"
+                        <input class="form-control me-2 rounded-pill" type="search" name="searchquery" placeholder="Search Course"
                             aria-label="Search">
                         <button class="btn btn-outline-success rounded-4" type="submit">
                             Search

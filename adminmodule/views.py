@@ -50,13 +50,14 @@ def logout(request):
         return redirect("../adminmodule/login")
 
 def course(request):
-    try:
+    # try:
         if request.session['userid'] != "":
         
             if request.method == "POST":
                 name = request.POST['name']
                 d = request.POST['desc']
-                ins = Course(name=name, desc=d)
+                i= request.FILES.get('image')
+                ins = Course(name=name, desc=d , img=i)
                 ins.save()
 
             f = request.GET.get('f')
@@ -92,8 +93,8 @@ def course(request):
             return render(request, 'adminmodule/course.html', params)
         else:
             return redirect('../adminmodule/login')
-    except:
-        return redirect('../adminmodule/login')
+    # except:
+    #     return redirect('../adminmodule/login')
 
 def Batches(request):
     try:
@@ -270,6 +271,7 @@ def notes(request):
                 cid = request.POST['cid']
                 name = request.POST['name']
                 f = request.FILES.get('notes')
+                
                 c = Course.objects.get(id=cid)
                 ins = Notes(cid=c, name=name, file=f)
                 ins.save()
@@ -302,8 +304,15 @@ def editCourse(request):
                 cid = request.POST['cid']
                 n = request.POST['name']
                 d = request.POST['desc']
+                f = request.FILES.get('image')
                 
                 Course.objects.filter(id=cid).update(name=n,desc=d)
+                if f:
+                    ins = Course.objects.get(id=cid)
+                    ins.img=f
+                    ins.save()
+                
+                
             return redirect('../adminmodule/course')
         else:
             return redirect('../adminmodule')
@@ -318,9 +327,10 @@ def editassignment(request):
                 n = request.POST['name']
                 f = request.FILES.get('assignment')
                 Assignment.objects.filter(id=cid).update(name=n)
-                ins = Assignment.objects.get(id=cid)
-                ins.file=f
-                ins.save()
+                if f:
+                    ins = Assignment.objects.get(id=cid)
+                    ins.file=f
+                    ins.save()
                 # if f:
                 #     image_path = f.file.path
                 #     if os.path.exists(image_path):
@@ -340,11 +350,12 @@ def editNotes(request):
                 cid = request.POST['cid']
                 n = request.POST['name']
                 f = request.FILES.get('notes')
+                print(f)
                 Notes.objects.filter(id=cid).update(name=n)
-                
-                ins = Notes.objects.get(id=cid)
-                ins.file=f
-                ins.save()
+                if f:
+                    ins = Notes.objects.get(id=cid)
+                    ins.file=f
+                    ins.save()
             return redirect('../adminmodule/course')
         else:
             return redirect('../adminmodule')
@@ -359,9 +370,10 @@ def editvideo(request):
                 n = request.POST['name']
                 f = request.FILES.get('video')
                 Video.objects.filter(id=cid).update(name=n)
-                ins = Video.objects.get(id=cid)
-                ins.file=f
-                ins.save()
+                if f:
+                    ins = Video.objects.get(id=cid)
+                    ins.file=f
+                    ins.save()
             return redirect('../adminmodule/course')
         else:
             return redirect('../adminmodule')
@@ -376,9 +388,10 @@ def editBatchvideo(request):
                 n = request.POST['name']
                 f = request.FILES.get('video')
                 Batch.objects.filter(id=cid).update(name=n)
-                ins = Batch_videos.objects.get(id=cid)
-                ins.file=f
-                ins.save()
+                if f:
+                    ins = Batch_videos.objects.get(id=cid)
+                    ins.file=f
+                    ins.save()
             return redirect("Batches")
         else:
             return redirect('../adminmodule')
@@ -529,7 +542,7 @@ def activateuser(request):
             if ins.status=="Active":
                 ins.status="Inactive"
                 ins.save()
-
+                messages.success(request, "Successfully Activated")
                 mess= f'Hello, {ins.sname} \n your account has been successfully  DEACTIVATED \n Now you cannot  access the courses \n Thanks.'
                 send_mail(
                 "Welcome to Educap ",
@@ -543,6 +556,7 @@ def activateuser(request):
             if ins.status=="Inactive" and flag==0:
                 ins.status="Active"
                 ins.save()
+                messages.success(request, "Successfully Deactivated")
 
                 mess= f'Hello, {ins.sname} \n your account has been successfully ACTIVATED \n Now you can access the courses \n Thanks.'
                 send_mail(
@@ -553,6 +567,8 @@ def activateuser(request):
                 fail_silently = False
 
                 )
+                
+
               
             return redirect('../adminmodule/showusers')
         else:
@@ -615,6 +631,25 @@ def userBatchUpdate(request):
             # all selected Batches
 
             return redirect('../adminmodule/showusers')
+        else:
+            return redirect('../adminmodule/login')
+    except:
+        return redirect('../adminmodule/login')
+
+def changepass(request):
+    try:
+        if request.session['userid'] !="":
+            user1 = Admins.objects.get(id=request.session['userid'])
+            if request.method == "POST":
+                pas1 = request.POST['pas1']
+                pas2 = request.POST['pas2']
+                if pas1!=user1.password:
+                    messages.warning(request,"old password isn't matching")
+                    return redirect('../adminmodule')
+                Admins.objects.filter(id=request.session['userid']).update(password=pas2)
+                messages.warning(request,"Password changed")
+                return redirect('../adminmodule')
+            return redirect('../adminmodule')
         else:
             return redirect('../adminmodule/login')
     except:
