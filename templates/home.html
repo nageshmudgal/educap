@@ -16,7 +16,7 @@
             {% for i in courses %}
             <div class="card rounded m-1 mx-auto border" style="width: 15rem;">
                 
-                <img src="media/{{i.img}}" class="card-img-top" alt="...">
+                <img src="media/{{i.img}}" onerror="if (this.src != 'media/error.jpg') this.src = 'media/error.jpg';" class="card-img-top" alt="...">
                 <a href="../viewcourse?data={{i.pk}}"></a>
                 <center><b>{{i.name}}</b></center>
                 <div class="card-body">
